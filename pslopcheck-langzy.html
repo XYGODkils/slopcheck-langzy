@@ -1,0 +1,1880 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#141516">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23141516'/%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='7' cy='14.5' r='3'/%3E%3Ccircle cx='17' cy='14.5' r='3'/%3E%3Cpath d='M10 14.5c1-.8 3-.8 4 0M4 14.5L5 8.5M20 14.5L19 8.5'/%3E%3C/g%3E%3C/svg%3E">
+  <title>Cek AI Slop by langzy</title>
+  <meta name="description" content="Paste a link or drop a screenshot. slopcheck reads the markup and the pixels, then roasts every AI design pattern it finds.">
+  <meta property="og:title" content="Cek AI Slop: is your website AI slop?">
+  <meta property="og:description" content="Paste a link or drop a screenshot. We read the markup and the pixels, then tell you exactly what the robots left behind.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..500&family=Martian+Mono:wdth,wght@75..112.5,300..500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/motion@12/dist/motion.js" async></script>
+  <script>try{var t=localStorage.getItem("slopcheck-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t)}}catch(e){}</script>
+  <style>
+    :root,:root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #141516;
+      --text: #f2f3f5;
+      --muted: #9a9ea6;
+      --faint: #6d717a;
+      --glass: rgba(255,255,255,.065);
+      --glass-strong: rgba(255,255,255,.11);
+      --field: rgba(0,0,0,.28);
+      --border: rgba(255,255,255,.13);
+      --shine: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(255,255,255,.04), inset 0 0 22px rgba(255,255,255,.03);
+      --shine-soft: inset 0 1px 0 rgba(255,255,255,.14);
+      --drop: 0 14px 40px rgba(0,0,0,.45);
+      --field-shadow: inset 0 2px 8px rgba(0,0,0,.25);
+      --focus: rgba(255,255,255,.4);
+      --focus-ring: rgba(255,255,255,.07);
+      --orb1: rgba(190,196,206,.34);
+      --orb2: rgba(140,146,158,.32);
+      --ind-bg: rgba(255,255,255,.17);
+      --ind-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 4px 14px rgba(0,0,0,.35);
+      --sel-bg: rgba(255,255,255,.88);
+      --sel-text: #16171a;
+      --btn-bg: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.12));
+      --btn-bg-hover: linear-gradient(180deg, rgba(255,255,255,.36), rgba(255,255,255,.17));
+      --btn-border: rgba(255,255,255,.35);
+      --btn-text: #ffffff;
+      --btn-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 10px 26px rgba(0,0,0,.4);
+      --hover-bg: rgba(255,255,255,.18);
+      --dock-bg: rgba(20,21,22,.8);
+      --ascii-lo: #8a8f98;
+      --ascii-hi: #ffffff;
+      --line: rgba(255,255,255,.1);
+      --spot: rgba(255,255,255,.09);
+      --glow: rgba(200,205,215,.16);
+    }
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #e8eaed;
+      --text: #14161a;
+      --muted: #5d636c;
+      --faint: #8b9099;
+      --glass: rgba(255,255,255,.55);
+      --glass-strong: rgba(255,255,255,.82);
+      --field: rgba(255,255,255,.7);
+      --border: rgba(20,24,30,.11);
+      --shine: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(20,24,30,.04), inset 0 0 22px rgba(255,255,255,.35);
+      --shine-soft: inset 0 1px 0 rgba(255,255,255,.9);
+      --drop: 0 12px 34px rgba(30,36,46,.13);
+      --field-shadow: inset 0 2px 6px rgba(20,24,30,.06);
+      --focus: rgba(20,24,30,.38);
+      --focus-ring: rgba(20,24,30,.08);
+      --orb1: rgba(255,255,255,.95);
+      --orb2: rgba(140,156,184,.4);
+      --ind-bg: rgba(255,255,255,.95);
+      --ind-shadow: inset 0 1px 0 #ffffff, 0 4px 14px rgba(30,36,46,.16);
+      --sel-bg: #1a1c20;
+      --sel-text: #ffffff;
+      --btn-bg: linear-gradient(180deg, #34373d, #17191c);
+      --btn-bg-hover: linear-gradient(180deg, #40444b, #1f2226);
+      --btn-border: rgba(20,24,30,.55);
+      --btn-text: #ffffff;
+      --btn-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 10px 24px rgba(30,36,46,.28);
+      --hover-bg: rgba(255,255,255,1);
+      --dock-bg: rgba(232,234,237,.82);
+      --ascii-lo: #7b808a;
+      --ascii-hi: #14161a;
+      --line: rgba(20,24,30,.1);
+      --spot: rgba(255,255,255,.75);
+      --glow: rgba(110,125,150,.2);
+    }
+    :root {
+      --display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+      --mono: "Martian Mono", ui-monospace, Menlo, monospace;
+      --r: 13px;
+      --radius: 20px;
+      --blur: blur(26px) saturate(170%);
+      --ease: cubic-bezier(.2, .8, .2, 1);
+      --spring-ui: linear(0, .1176, .3457, .5719, .7511, .8746, .9503, .9911, 1.0095, 1.015, 1.0141, 1.0109, 1.0074, 1.0044, 1.0023, 1.001, 1.0003, 1);
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; background: var(--bg); }
+    html.theming * { transition: background-color .5s ease, color .5s ease, border-color .5s ease, box-shadow .5s ease !important; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--display);
+      font-optical-sizing: auto;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      min-height: 100dvh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before, body::after { content: ""; position: fixed; border-radius: 50%; filter: blur(70px); pointer-events: none; z-index: 0; }
+    body::before { width: 420px; height: 420px; top: -120px; left: -100px; background: radial-gradient(circle, var(--orb1), transparent 70%); animation: driftA 22s ease-in-out infinite alternate; }
+    body::after { width: 480px; height: 480px; bottom: -160px; right: -140px; background: radial-gradient(circle, var(--orb2), transparent 70%); animation: driftB 26s ease-in-out infinite alternate; }
+    @keyframes driftA { from { transform: translate(0, 0); } to { transform: translate(90px, 70px); } }
+    @keyframes driftB { from { transform: translate(0, 0); } to { transform: translate(-80px, -60px); } }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+    @keyframes itemIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    @keyframes panelIn { from { opacity: 0; transform: translateX(var(--dx, 24px)); } to { opacity: 1; transform: none; } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.14); } }
+    @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.15); } }
+    @keyframes caret { 50% { opacity: 0; } }
+    @keyframes hop { 0% { transform: translateY(0) scale(1); } 40% { transform: translateY(-5px) scale(1.18); } 100% { transform: translateY(0) scale(1.08); } }
+    @keyframes sweep { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+    button, input { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    a { -webkit-tap-highlight-color: transparent; }
+    .hidden { display: none !important; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .wrap { position: relative; z-index: 1; width: min(100% - 64px, 1200px); margin-inline: auto; }
+    .narrow { max-width: 720px; margin-inline: auto; }
+
+    .top { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: env(safe-area-inset-top, 0px); animation: fadeDown .6s var(--ease) both; }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .logo { width: 46px; height: 46px; flex-shrink: 0; border-radius: 15px; color: var(--text); background: var(--glass-strong); border: 1px solid var(--border); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--shine), var(--drop); display: flex; align-items: center; justify-content: center; }
+    .logo svg { width: 25px; height: 25px; animation: pulse 3.2s ease-in-out infinite; }
+    .logo svg circle:not(.pupil) { transform-origin: center; transform-box: fill-box; animation: blink 5s ease-in-out infinite; }
+    .mark { display: block; font-family: var(--mono); font-size: 15px; font-weight: 500; letter-spacing: -.01em; line-height: 1.2; }
+    .mark b { color: var(--muted); font-weight: 500; }
+    .byline { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: var(--muted); }
+    .top-note { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+    .hero { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: center; min-height: min(780px, calc(100svh - 76px)); padding-bottom: 32px; }
+    .intro { grid-column: 1 / span 6; padding-right: 24px; }
+    .intro > * { animation: itemIn .7s var(--ease) both; }
+    .intro > *:nth-child(1) { animation-delay: .05s; }
+    .intro > *:nth-child(2) { animation-delay: .12s; }
+    .intro > *:nth-child(3) { animation-delay: .19s; }
+    .intro > *:nth-child(4) { animation-delay: .26s; }
+    .intro > *:nth-child(5) { animation-delay: .33s; }
+    .intro > *:nth-child(6) { animation-delay: .4s; }
+    h1 { margin: 0; font-size: clamp(48px, 6.3vw, 92px); font-weight: 300; line-height: 1.02; letter-spacing: -.035em; text-wrap: balance; }
+    h1 .hot { position: relative; display: inline-block; white-space: nowrap; color: var(--muted); animation: wordUp .9s var(--ease) both; animation-delay: var(--d, .4s); }
+    .hot-s { position: absolute; left: 0; top: 0; white-space: nowrap; pointer-events: none; }
+    .hot.scr .hot-t { color: transparent; }
+    .hot:hover { cursor: default; }
+    h1 .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .12em; margin-bottom: -.12em; }
+    h1 .wi { display: inline-block; animation: wordUp .9s var(--ease) both; animation-delay: var(--d, 0s); }
+    @keyframes wordUp { from { transform: translateY(105%); opacity: 0; } to { transform: none; opacity: 1; } }
+    .lede { margin: 24px 0 36px; max-width: 34ch; color: var(--muted); font-size: 19px; line-height: 1.45; text-wrap: pretty; }
+
+    .seg { position: relative; display: inline-flex; padding: 4px; border-radius: 999px; background: var(--glass); border: 1px solid var(--border); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--shine); }
+    .seg button { position: relative; z-index: 1; height: 32px; padding: 0 18px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font-size: 14px; font-weight: 600; transition: color .3s; }
+    .seg button[aria-selected="true"] { color: var(--text); }
+    .seg button:hover { color: var(--text); }
+    .seg .ind { position: absolute; top: 4px; left: 0; height: 32px; border-radius: 999px; background: var(--ind-bg); box-shadow: var(--ind-shadow); transition: transform .45s var(--ease), width .45s var(--ease); }
+
+    .panel-in { margin-top: 14px; }
+    .row { display: flex; gap: 8px; }
+    .field { position: relative; flex: 1; }
+    .field .pre { position: absolute; left: 16px; top: 0; height: 48px; display: flex; align-items: center; font-family: var(--mono); font-size: 12px; color: var(--faint); pointer-events: none; }
+    .field.typed .pre { display: none; }
+    .field.typed input { padding-left: 16px; }
+    .field input { width: 100%; height: 48px; padding: 0 16px 0 82px; border: 1px solid var(--border); border-radius: var(--r); background: var(--field); box-shadow: var(--field-shadow); font-size: 16px; outline: none; transition: border-color .25s, box-shadow .25s, transform .25s var(--ease); }
+    .field input::placeholder { color: var(--faint); }
+    .field input:hover { border-color: var(--focus); }
+    .field input:focus-visible { border-color: var(--focus); box-shadow: var(--field-shadow), 0 0 0 4px var(--focus-ring); transform: translateY(-1px); }
+    .go { position: relative; overflow: hidden; height: 48px; padding: 0 22px; border: 1px solid var(--btn-border); border-radius: var(--r); background: var(--btn-bg); color: var(--btn-text); box-shadow: var(--btn-shadow); font-size: 15px; font-weight: 700; white-space: nowrap; transition: transform .25s var(--spring-ui), background .3s, opacity .15s; }
+    .go::after { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent); transform: skewX(-20deg); transition: left .7s var(--ease); }
+    .go:hover::after { left: 130%; }
+    .go:hover { background: var(--btn-bg-hover); }
+    .go:active { transform: scale(.97); }
+    .go:disabled { opacity: .6; cursor: progress; transform: none; }
+    :is(.go, .seg button, .quiet, .ex, .peek, .drop, .dock-item, .theme-card):focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+    .drop { width: 100%; display: flex; flex-direction: column; justify-content: center; gap: 4px; min-height: 96px; padding: 16px 20px; border: 1px dashed var(--focus); border-radius: var(--r); background: var(--glass); box-shadow: var(--shine-soft); text-align: left; transition: border-color .2s, background .25s, transform .25s var(--ease); }
+    .drop:hover, .drop.drag { background: var(--glass-strong); transform: translateY(-2px); }
+    .drop strong { font-size: 16px; font-weight: 600; }
+    .drop span { color: var(--muted); font-size: 14px; }
+    #file { display: none; }
+
+    .examples { margin: 16px 0 0; color: var(--muted); font-size: 14px; }
+    .ex { padding: 0; border: 0; background: none; color: var(--text); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+    .ex:hover { color: var(--muted); }
+    .err { min-height: 20px; margin: 12px 0 0; color: var(--text); font-size: 14px; }
+
+    .scope { grid-column: 7 / span 6; margin: 0; padding: 16px; border-radius: var(--radius); background: var(--glass); border: 1px solid var(--border); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--shine), var(--drop); animation: itemIn .8s .2s var(--ease) both; }
+    .screen { position: relative; height: clamp(300px, 50vh, 440px); }
+    .screen canvas { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity .3s; }
+    .screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 8px; opacity: 0; transition: opacity .3s; pointer-events: none; }
+    .screen.orig img { opacity: 1; }
+    .screen.orig canvas { opacity: 0; }
+    .cap { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-top: 14px; font-size: 14px; line-height: 1.45; color: var(--muted); }
+    .cap p { margin: 0; max-width: 46ch; }
+    .peek { flex: none; height: 32px; padding: 0 14px; border: 1px solid var(--border); border-radius: 999px; background: var(--glass-strong); box-shadow: var(--shine-soft); font-size: 13px; font-weight: 600; transition: transform .25s var(--spring-ui), background .25s; }
+    .peek:hover { background: var(--hover-bg); }
+    .peek:active { transform: scale(.95); }
+    .peek[hidden] { display: none; }
+    .log { list-style: none; margin: 14px 0 0; padding: 0; height: 108px; overflow: hidden; font-family: var(--mono); font-size: 12px; line-height: 18px; }
+    .log li { display: flex; justify-content: space-between; gap: 16px; color: var(--muted); }
+    .log li b { font-weight: 400; color: var(--text); white-space: nowrap; }
+    .log li.hit b { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+
+    .result { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding: 64px 0 80px; scroll-margin-top: 24px; }
+    .result[hidden] { display: none; }
+    .verdict-col { grid-column: 1 / span 7; }
+    .score { display: block; width: 100%; height: 320px; }
+    .verdict { margin: 32px 0 0; font-size: clamp(34px, 4vw, 52px); font-weight: 300; line-height: 1.08; letter-spacing: -.025em; text-wrap: balance; }
+    .roasts { list-style: none; margin: 40px 0 0; padding: 0; display: grid; gap: 24px; max-width: 34em; }
+    .roasts li { font-size: 21px; line-height: 1.35; letter-spacing: -.005em; text-wrap: pretty; }
+    .roasts small { display: block; margin-top: 6px; font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0; }
+    .critic { display: flex; align-items: center; gap: 8px; margin: 36px 0 0; font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+    .critic[hidden] { display: none; }
+    .critic::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--text); }
+    .critic.wait span::after { content: "_"; animation: caret 1s steps(1) infinite; }
+    .critic + .roasts { margin-top: 16px; }
+    .fix { max-width: 34em; margin: 32px 0 0; padding-top: 20px; border-top: 1px solid var(--line); font-size: 17px; line-height: 1.45; text-wrap: pretty; }
+    .fix[hidden] { display: none; }
+    .fix b { font-weight: 400; }
+    .fix span { display: block; margin-bottom: 6px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+    .acts { display: flex; gap: 8px; margin-top: 48px; }
+    .quiet { height: 48px; padding: 0 18px; border: 1px solid var(--border); border-radius: var(--r); background: var(--glass-strong); box-shadow: var(--shine-soft); font-size: 15px; font-weight: 600; transition: transform .25s var(--spring-ui), background .25s; }
+    .quiet:hover { background: var(--hover-bg); }
+    .quiet:active { transform: scale(.97); }
+
+    .receipt-col { grid-column: 9 / span 4; align-self: start; padding-top: 16px; }
+    .receipt {
+      --s: 7px;
+      padding: 28px 24px 40px;
+      background: var(--glass-strong);
+      border-radius: 6px 6px 0 0;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.5;
+      -webkit-mask: radial-gradient(var(--s) at 50% 100%, #0000 98%, #000) 50% / calc(2 * var(--s)) 100% repeat-x;
+              mask: radial-gradient(var(--s) at 50% 100%, #0000 98%, #000) 50% / calc(2 * var(--s)) 100% repeat-x;
+    }
+    .rc-head { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); margin-bottom: 24px; }
+    .rc-head span:first-child { color: var(--text); }
+    .items { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+    .items li { display: grid; grid-template-columns: 1fr auto; column-gap: 12px; }
+    .items .n { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+    .items .bar { grid-column: 1 / -1; color: var(--text); letter-spacing: .05em; }
+    .total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 32px; font-size: 20px; }
+    .total span:first-child { font-size: 12px; color: var(--muted); }
+    .items li.credit span:first-child, .items li.credit .n, .items li.muted { color: var(--muted); }
+    .report { grid-column: 1 / -1; margin-top: 144px; }
+    .report-h { margin: 0; font-size: clamp(30px, 3.4vw, 44px); font-weight: 300; line-height: 1.1; letter-spacing: -.02em; }
+    .report-lede { margin: 16px 0 0; max-width: 60ch; color: var(--muted); font-size: 17px; line-height: 1.5; text-wrap: pretty; }
+    .ev { list-style: none; margin: 56px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px 48px; }
+    .ev .tag { font-family: var(--mono); font-size: 12px; color: var(--text); white-space: pre; }
+    .ev h4 { margin: 10px 0 0; font-size: 22px; font-weight: 400; line-height: 1.3; letter-spacing: -.01em; text-wrap: pretty; }
+    .ev .quotes { display: grid; gap: 6px; margin-top: 16px; font-family: var(--mono); font-size: 12.5px; line-height: 1.55; color: var(--muted); }
+    .ev .quotes p { margin: 0; overflow-wrap: anywhere; }
+    .ev .why { margin: 14px 0 0; max-width: 52ch; color: var(--muted); font-size: 15px; line-height: 1.5; text-wrap: pretty; }
+    .good { margin-top: 112px; }
+    .good .ev { margin-top: 40px; }
+    .good .tag { color: var(--muted); }
+    .good li p { margin: 8px 0 0; font-size: 17px; line-height: 1.45; }
+    .fine { margin: 16px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+
+    .card { background: var(--glass); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--shine), var(--drop); display: flex; flex-direction: column; gap: 16px; }
+    .view.enter { animation: panelIn .55s var(--ease) both; }
+    .view.enter .card > * { animation: itemIn .6s var(--ease) both; }
+    .view.enter .card > *:nth-child(2) { animation-delay: .06s; }
+    .view.enter .card > *:nth-child(3) { animation-delay: .12s; }
+    .view.enter .card > *:nth-child(4) { animation-delay: .18s; }
+    .view { padding: 24px 0 40px; }
+    .ascii-box { position: relative; height: 200px; border-radius: 14px; background: var(--field); border: 1px solid var(--border); box-shadow: var(--field-shadow); overflow: hidden; }
+    .ascii-box canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .info-block h2 { margin: 0 0 8px; font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); }
+    .info-block p { margin: 0; font-size: 15px; line-height: 1.6; opacity: .9; }
+    .info-block + .info-block { padding-top: 16px; border-top: 1px solid var(--line); }
+    .contact-list { display: flex; flex-wrap: wrap; gap: 10px; }
+    .contact-link { display: inline-flex; align-items: center; gap: 9px; padding: 10px 16px; border-radius: 999px; background: var(--glass-strong); border: 1px solid var(--border); color: var(--text); font-size: 13.5px; font-weight: 600; text-decoration: none; box-shadow: var(--shine-soft); transition: transform .2s var(--ease), background .25s; }
+    .contact-link svg { width: 17px; height: 17px; flex-shrink: 0; }
+    .contact-link:hover { background: var(--hover-bg); transform: translateY(-2px); }
+    .contact-link:active { transform: scale(.96); }
+    .ticker { font-family: var(--mono); font-size: 12px; color: var(--muted); min-height: 18px; }
+    .ticker::after { content: "_"; animation: caret 1s steps(1) infinite; }
+
+    .theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .theme-card { position: relative; display: flex; flex-direction: column; gap: 12px; padding: 12px; text-align: left; cursor: pointer; background: var(--glass); border: 1.5px solid var(--border); border-radius: 18px; box-shadow: var(--shine-soft); transition: transform .3s var(--ease), border-color .3s, background .3s, box-shadow .3s; }
+    .theme-card:hover { transform: translateY(-3px); background: var(--glass-strong); }
+    .theme-card:active { transform: scale(.96); }
+    .theme-card.active { border-color: var(--sel-bg); background: var(--glass-strong); box-shadow: var(--shine), 0 10px 28px rgba(0,0,0,.2); }
+    .theme-preview { display: flex; flex-direction: column; justify-content: center; gap: 7px; height: 96px; padding: 14px; border-radius: 12px; border: 1px solid rgba(128,128,128,.28); overflow: hidden; }
+    .theme-preview i { display: block; height: 10px; border-radius: 6px; }
+    .theme-preview i:nth-child(1) { width: 38%; }
+    .theme-preview i:nth-child(2) { width: 100%; height: 16px; }
+    .theme-preview i:nth-child(3) { width: 64%; }
+    .prev-dark { background: #1b1c1e; }
+    .prev-dark i { background: rgba(255,255,255,.16); }
+    .prev-dark i:nth-child(3) { background: rgba(255,255,255,.6); }
+    .prev-light { background: #f1f2f4; }
+    .prev-light i { background: rgba(20,24,30,.14); }
+    .prev-light i:nth-child(3) { background: #1a1c20; }
+    .theme-name { font-size: 14px; font-weight: 700; padding-left: 2px; }
+    .theme-check { position: absolute; top: 20px; right: 20px; width: 22px; height: 22px; border-radius: 50%; background: var(--sel-bg); transform: scale(0); opacity: 0; transition: transform .45s var(--ease), opacity .3s; }
+    .theme-check::after { content: ""; position: absolute; left: 7px; top: 4px; width: 5px; height: 10px; border: solid var(--sel-text); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+    .theme-card.active .theme-check { transform: scale(1); opacity: 1; }
+
+    footer { display: flex; justify-content: space-between; gap: 16px; padding: 24px 0 124px; color: var(--muted); font-family: var(--mono); font-size: 11px; }
+
+    .dock { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 50; width: min(calc(100% - 28px), 500px); transform: translateX(-50%); animation: dockIn .9s .3s var(--ease) both; }
+    @keyframes dockIn { from { opacity: 0; transform: translateX(-50%) translateY(50px) scale(.88); } to { opacity: 1; transform: translateX(-50%); } }
+    .dock-in { position: relative; display: flex; gap: 4px; padding: 6px; border-radius: 999px; background: var(--dock-bg); border: 1px solid var(--border); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--shine), var(--drop); }
+    .dock-pill { position: absolute; top: 6px; bottom: 6px; left: 0; border-radius: 999px; background: var(--ind-bg); box-shadow: var(--ind-shadow); transition: transform .35s var(--ease), width .35s var(--ease); }
+    .dock-item { position: relative; z-index: 1; flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 0; height: 48px; padding: 0; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font-size: 13px; font-weight: 700; overflow: hidden; transition: flex .55s var(--ease), color .3s, gap .4s var(--ease); }
+    .dock-item svg { flex: none; width: 23px; height: 23px; transform: scale(var(--s, 1)); transition: transform .25s var(--ease); }
+    .dock-item span:not(.ripple) { max-width: 0; opacity: 0; white-space: nowrap; overflow: hidden; transform: translateX(-6px); transition: max-width .5s var(--ease), opacity .35s, transform .5s var(--ease); }
+    .dock-item:hover { color: var(--text); }
+    .dock-item:active svg { transform: scale(.8); }
+    .dock-item.active { flex: 2.3; gap: 8px; color: var(--text); }
+    .dock-item.active span:not(.ripple) { max-width: 90px; opacity: 1; transform: none; }
+    .dock-item.hop[data-view="check"] svg { animation: hop .55s var(--ease); }
+    .dock-item.hop[data-view="info"] svg { animation: spin .6s var(--ease); }
+    .dock-item.hop[data-view="theme"] svg { animation: half .65s var(--ease); }
+    @keyframes spin { from { transform: rotate(-200deg) scale(.6); } to { transform: none; } }
+    @keyframes half { from { transform: rotate(-180deg) scale(.7); } to { transform: none; } }
+    .ripple { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: currentColor; opacity: .28; pointer-events: none; transform: scale(0); animation: ripple .65s var(--ease) forwards; }
+    @keyframes ripple { to { transform: scale(18); opacity: 0; } }
+    .glow { position: fixed; left: 0; top: 0; width: 460px; height: 460px; margin: -230px 0 0 -230px; border-radius: 50%; background: radial-gradient(circle, var(--glow), transparent 65%); pointer-events: none; z-index: 0; opacity: 0; transition: opacity .5s; will-change: transform; }
+    .glow.on { opacity: 1; }
+    .card, .scope, .drop, .theme-card { position: relative; }
+    .card::before, .scope::before, .drop::before, .theme-card::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), var(--spot), transparent 62%); opacity: 0; transition: opacity .35s; pointer-events: none; }
+    .card:hover::before, .scope:hover::before, .drop:hover::before, .theme-card:hover::before { opacity: 1; }
+    .rv { opacity: 0; transform: translateY(26px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .rv.in { opacity: 1; transform: none; }
+    .pupil { transform: translate(var(--px, 0px), var(--py, 0px)); transition: transform .18s ease-out; }
+    .logo { transition: transform .4s var(--spring-ui); }
+    .logo:hover { transform: rotate(-7deg) scale(1.08); }
+    .spark { position: fixed; z-index: 90; pointer-events: none; font-family: var(--mono); font-size: 13px; color: var(--text); }
+    .quiet, .peek, .seg button { position: relative; overflow: hidden; }
+
+    @media (max-width: 900px) {
+      .wrap { width: min(100% - 40px, 1200px); }
+      .hero { display: block; min-height: 0; padding: 24px 0 0; }
+      .intro { padding: 0; }
+      h1 { font-size: clamp(40px, 11vw, 64px); }
+      .lede { font-size: 17px; margin: 20px 0 28px; }
+      .scope { margin-top: 48px; }
+      .screen { height: 280px; }
+      .result { display: block; padding: 72px 0 40px; }
+      .score { height: 200px; }
+      .verdict { margin-top: 24px; }
+      .roasts li { font-size: 19px; }
+      .receipt-col { padding-top: 56px; }
+      .report { margin-top: 96px; }
+      .ev { grid-template-columns: 1fr; gap: 48px; }
+      .ev h4 { font-size: 20px; }
+      .top-note { display: none; }
+      footer { flex-direction: column; gap: 6px; }
+    }
+    @media (max-width: 520px) {
+      .row { flex-direction: column; }
+      .go { width: 100%; }
+      .acts { flex-direction: column; }
+      .acts button { width: 100%; }
+      .cap { flex-direction: column; gap: 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="6" cy="15" r="3.5"/>
+          <circle cx="18" cy="15" r="3.5"/>
+          <circle class="pupil" cx="6" cy="15" r="1.2" fill="currentColor" stroke="none"/>
+          <circle class="pupil" cx="18" cy="15" r="1.2" fill="currentColor" stroke="none"/>
+          <path d="M9.5 15c.9-.9 4.1-.9 5 0"/>
+          <path d="M2.5 15L4 8M21.5 15L20 8"/>
+        </svg>
+      </div>
+      <div>
+        <span class="mark">Cek AI Slop</span>
+        <span class="byline">@làngzyjir_</span>
+      </div>
+    </div>
+    <span class="top-note">A field instrument for machine-made websites</span>
+  </header>
+
+  <main>
+    <section class="view" id="viewCheck">
+      <section class="hero">
+        <div class="intro">
+          <h1>Is your website <span class="hot" id="hot"><span class="hot-t">AI slop?</span><span class="hot-s" aria-hidden="true"></span></span></h1>
+          <p class="lede">Paste a link or drop a screenshot. We read the markup and the pixels, then tell you exactly what the robots left behind.</p>
+
+          <div class="seg" role="tablist" aria-label="What are you checking">
+            <span class="ind" aria-hidden="true"></span>
+            <button role="tab" id="tabUrl" aria-selected="true" aria-controls="urlPanel">Link</button>
+            <button role="tab" id="tabShot" aria-selected="false" aria-controls="shotPanel" tabindex="-1">Screenshot</button>
+          </div>
+
+          <form class="panel-in" id="urlPanel" role="tabpanel" aria-labelledby="tabUrl" novalidate>
+            <div class="row">
+              <label class="field">
+                <span class="sr">Website link</span>
+                <span class="pre" aria-hidden="true">https://</span>
+                <input id="url" type="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="yourwebsite.com">
+              </label>
+              <button class="go" id="go" type="submit">Check my slop</button>
+            </div>
+          </form>
+
+          <div class="panel-in" id="shotPanel" role="tabpanel" aria-labelledby="tabShot" hidden>
+            <button class="drop" id="drop" type="button">
+              <strong>Drop, paste or choose a screenshot</strong>
+              <span>PNG, JPG or WebP up to 12&#8239;MB. It never leaves your browser.</span>
+            </button>
+            <input id="file" type="file" accept="image/png,image/jpeg,image/webp">
+          </div>
+
+          <p class="examples" id="examples">Try it on <button class="ex" type="button">vercel.com</button>, <button class="ex" type="button">netlify.com</button> or your friend’s startup.</p>
+          <p class="err" id="err" role="alert"></p>
+        </div>
+
+        <figure class="scope" aria-labelledby="capText">
+          <div class="screen" id="screen">
+            <canvas id="scope" aria-hidden="true"></canvas>
+            <img id="orig" alt="">
+          </div>
+          <figcaption class="cap">
+            <p id="capText">Specimen 01. The eye that watches every AI site, finally held for observation.</p>
+            <button class="peek" id="peek" type="button" aria-pressed="false" hidden>Show original</button>
+          </figcaption>
+          <ol class="log" id="log" aria-hidden="true"></ol>
+          <p class="sr" id="status" aria-live="polite"></p>
+        </figure>
+      </section>
+
+      <section class="result" id="result" hidden aria-labelledby="verdict">
+        <div class="verdict-col">
+          <canvas class="score" id="scoreArt" role="img" aria-label=""></canvas>
+          <h2 class="verdict" id="verdict"></h2>
+          <p class="critic" id="critic" hidden><span></span></p>
+          <ul class="roasts" id="roasts"></ul>
+          <p class="fix" id="fix" hidden><span>If you fix one thing</span><b id="fixText"></b></p>
+          <div class="acts">
+            <button class="go" id="share" type="button">Share your shame</button>
+            <button class="quiet" id="again" type="button">Try another</button>
+          </div>
+        </div>
+        <div class="receipt-col">
+          <div class="receipt">
+            <div class="rc-head"><span>Slop receipt</span><span id="rcName"></span></div>
+            <ol class="items" id="items"></ol>
+            <div class="total"><span>Total slop</span><span id="rcTotal"></span></div>
+          </div>
+          <p class="fine">Not science. Links are read through r.jina.ai and photographed by microlink. The second opinion is written by an AI through OpenRouter from the findings above; screenshots stay on your device.</p>
+        </div>
+        <div class="report">
+          <h3 class="report-h">The evidence</h3>
+          <p class="report-lede" id="reportLede"></p>
+          <ol class="ev" id="ev"></ol>
+          <div class="good" id="goodWrap" hidden>
+            <h3 class="report-h">What you got right</h3>
+            <ul class="ev" id="good"></ul>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="view hidden" id="viewInfo">
+      <div class="narrow">
+        <div class="card">
+          <div class="ascii-box"><canvas id="asciiArt" aria-hidden="true"></canvas></div>
+          <div class="info-block">
+            <h2>Info Web</h2>
+            <p>slopcheck membaca markup dan piksel sebuah website, lalu mengomentari setiap pola desain AI yang ditemukan. Semua pengecekan pola berjalan langsung di perangkatmu, sedangkan screenshot tidak pernah keluar dari browser.</p>
+          </div>
+          <div class="info-block">
+            <h2>Kontak</h2>
+            <div class="contact-list">
+              <a class="contact-link" href="https://www.tiktok.com/@langzyjir_" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+                <span>TikTok @langzyjir_</span>
+              </a>
+              <a class="contact-link" href="https://whatsapp.com/channel/0029VbE6t1gGehEJkb9Jnw1x" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9.3 8.6c.3-.5.8-.4 1 0l.8 1.5c.1.3 0 .5-.2.7l-.5.5c.6 1.1 1.4 1.9 2.5 2.5l.5-.5c.2-.2.5-.3.7-.2l1.5.8c.4.2.5.7.1 1.1-.7.8-1.7 1-2.7.6-2-.8-3.5-2.3-4.3-4.3-.3-.9-.1-1.8.6-2.2z"/></svg>
+                <span>làngzy.html</span>
+              </a>
+            </div>
+          </div>
+          <div class="ticker" id="ticker"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view hidden" id="viewTheme">
+      <div class="narrow">
+        <div class="card">
+          <div class="info-block">
+            <h2>Tema</h2>
+            <p>Pilih tampilan yang paling nyaman di matamu. Pilihan akan tersimpan otomatis.</p>
+          </div>
+          <div class="theme-grid">
+            <button class="theme-card active" id="btnThemeDark" type="button">
+              <span class="theme-preview prev-dark"><i></i><i></i><i></i></span>
+              <span class="theme-name">Gelap</span>
+              <span class="theme-check"></span>
+            </button>
+            <button class="theme-card" id="btnThemeLight" type="button">
+              <span class="theme-preview prev-light"><i></i><i></i><i></i></span>
+              <span class="theme-name">Putih</span>
+              <span class="theme-check"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Cek AI Slop. Built to bully rounded rectangles.</span>
+    <span>Nothing is stored. We forget you instantly, unlike your hero section.</span>
+  </footer>
+</div>
+
+<nav class="dock" aria-label="Menu">
+  <div class="dock-in" id="dockIn">
+    <span class="dock-pill" id="dockLine" aria-hidden="true"></span>
+    <button class="dock-item active" type="button" data-view="check" aria-label="Cek">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="15" r="3.5"/><circle cx="18" cy="15" r="3.5"/><path d="M9.5 15c.9-.9 4.1-.9 5 0"/><path d="M2.5 15L4 8M21.5 15L20 8"/></svg>
+      <span>Cek</span>
+    </button>
+    <button class="dock-item" type="button" data-view="info" aria-label="Info">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
+      <span>Info</span>
+    </button>
+    <button class="dock-item" type="button" data-view="theme" aria-label="Tema">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z"/></svg>
+      <span>Tema</span>
+    </button>
+  </div>
+</nav>
+<div class="glow" id="glow" aria-hidden="true"></div>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (s) => document.querySelector(s);
+  let INK = '#f2f3f5', GREY = '#9a9ea6', ACC = '#ffffff', DIM = '#8a8f98', PAPER = '#141516';
+  const MONO = '"Martian Mono", ui-monospace, Menlo, monospace';
+  const DISPLAY = '"Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif';
+  const RAMP = ' .:-=+*#%@';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const isLight = () => document.documentElement.getAttribute('data-theme') === 'light';
+  function readColors() {
+    const cs = getComputedStyle(document.documentElement);
+    const v = (n, d) => cs.getPropertyValue(n).trim() || d;
+    INK = v('--text', INK); GREY = v('--muted', GREY); ACC = v('--ascii-hi', ACC); DIM = v('--ascii-lo', DIM); PAPER = v('--bg', PAPER);
+  }
+  readColors();
+
+  const el = {
+    tabUrl: $('#tabUrl'), tabShot: $('#tabShot'), ind: $('.seg .ind'),
+    urlPanel: $('#urlPanel'), shotPanel: $('#shotPanel'), url: $('#url'), go: $('#go'),
+    drop: $('#drop'), file: $('#file'), err: $('#err'), examples: $('#examples'),
+    screen: $('#screen'), scope: $('#scope'), orig: $('#orig'), cap: $('#capText'), peek: $('#peek'),
+    log: $('#log'), status: $('#status'),
+    result: $('#result'), scoreArt: $('#scoreArt'), verdict: $('#verdict'), roasts: $('#roasts'),
+    items: $('#items'), rcName: $('#rcName'), rcTotal: $('#rcTotal'), share: $('#share'), again: $('#again'),
+    reportLede: $('#reportLede'), ev: $('#ev'), goodWrap: $('#goodWrap'), good: $('#good'),
+    critic: $('#critic'), fix: $('#fix'), fixText: $('#fixText'), hot: $('#hot')
+  };
+
+  const state = { mode: 'url', busy: false, img: null, imgUrl: '', cells: null, last: null, scanning: false };
+
+  const VOICE = {
+    a: '==w34jpvI0XGo1NqaS7C5BQIOyvypCkZQdSyyCdoMVGUuEs4BOaFh5AeBHr3pykbEwynqnt+bsjBEZz7f/a5YVXEpE9tPG/Co1Ed',
+    b: 'HsTW+dYsZbuG3oVNCaL06XlaKJDkqq9sU8TESRWqLDv8PcyUr9s7YCPFxI1b',
+    c: ['==gPIRXl3P97cITWNQz8NKb6PsiThdo7H/+AqkEY', '=gy1vbZ6WcjXIxCuare4NECDnlYsNHPDxgkZ'],
+    d: '05FcIa73rzVKf9jc5u8+RAUbHdntzO85UQGQuZ54QTuRvs0ZQa7hmqRLKhHg6u84MJCQvc8vIbOHxUlMDqKk+zxcYw3m96d8VlTW4k93YO+C2c1OHSL3yvFORtWlsyZ6fcDNBcWuRHc6BMWQpZIrKffRj8EfEne1jrhJdty16no/YMCQu4pqMG6Cs4FdZCqyjHlPSdXmlGt8GUiFy15uVy6Dx8lOb3tlq7RKTpW2orIvJ0CUNFSqf/LrOYzA3JJpEbuFlJlbDr61jPBPIpnx1ecqP8zQ4hp6f7vAmwFMY66z3XRcXt3mwv49QoDUytZpRXLWkw1aaG6lqukeP92l0q57d0HB65WtR7bUTF2Wvt6oArvBk9RdWCbxqTxZFMwyimc7J9yQ4hcvLvKHioFfLDaw7nAcexnzjPc9AwzQ1gs8HfuG7cBbVWvmybBMWtjk2atuBhiX35ZqZvuXyp0Dwt72SDuCjBldA2a0kmkMF13ihaY6BkGRu94vJSKG/gkYDiq3oPwbFUSz8qs5eI3HnVovbDfHlUkYASf04bBee92mkiJrOt3Uplt6JybU6o1UyhLzv3OCipFaH+6ykDAMUB2whespXpXC4N4oGzvSxhFZJLKy4zwIP4DgsCs5WEXQ69ctD3PEnUxcaeKl4yXeLx3hjOc+cwzGudZ+JneG/MlauxfktrBFuclc/T7znXhKMZCkmKN4IcmBnd5oTzPC6sQbIXO2+PQIBx2yt2ooK0DU85MvDDvHwQBdR7v1nTBJfhG1xO94XwyS7YJ+D+PGygleT2a29uxN0EAb3+5xvvwKQBGjtCNpRcyB7B5qPjOGp5FeGe62qKhPIh3jrH4hUxTV9hJnl6LFmIlZFKb0yTlJfdzh9W58E0CW5NZtYCOF1k0WZTPy57BMaR1b428v0PRLLdFwvXc7NMzTrNcpFSPCukQeICaw6/wLMIWg9uI6DsiRipY7P/aF6s1fPzv07XRPWNnggSZuPUCX5k9sEnvGo41aXWrmhmhPXBnd8jd7K8QCo0ipw6c4DpiUpJMsDCeAmgVKA660o+QJLkWhmm9qfYCQmdI7fHeCwVFfP+Onj3xJXBXh3eNtbQiUsBItGfbG5dFdF6bm/jhMYp3ktmdvKozJBcXsmD4rLFGVq1YsD2MJk9AKACq0mrBLE5GgoD+yLtyQnFIpDHuT981dN3rykjRIRF3hxH85HQTWlNNoU7/A4p1cC6ry6rVNd1Wn76N+d9zHMomvbf/4R0yT3BMpQLORwkkX',
+    perDay: 15
+  };
+  const unpack = (s) => { try { const b = Uint8Array.from(atob([...s].reverse().join('')), (c) => c.charCodeAt(0)); return new TextDecoder().decode(b.map((x, i) => x ^ ((i * 31 + 7) % 251))); } catch { return ''; } };
+
+  const SCRAMBLE = 'ABDFGJMNQRTUVWXYZabdfgkmnqrtuwxyz0123456789#%&@$*+=?/<>{}[]';
+  function scramble(node, text, ms = 700, done) {
+    if (node._scr) cancelAnimationFrame(node._scr);
+    if (reduce.matches) { node.textContent = text; done?.(); return; }
+    const t0 = performance.now(); let tick = -1;
+    const step = (t) => {
+      const p = Math.min(1, (t - t0) / ms), k = Math.floor(t / 45);
+      if (k !== tick || p === 1) {
+        tick = k;
+        const upto = Math.floor(p * text.length);
+        let out = '';
+        for (let i = 0; i < text.length; i++) out += i < upto || text[i] === ' ' ? text[i] : SCRAMBLE[(Math.random() * SCRAMBLE.length) | 0];
+        node.textContent = out;
+      }
+      if (p < 1) node._scr = requestAnimationFrame(step); else { node._scr = 0; done?.(); }
+    };
+    node._scr = requestAnimationFrame(step);
+  }
+
+  const fontsReady = Promise.race([
+    Promise.all([document.fonts.load('12px "Martian Mono"'), document.fonts.load('300 120px "Bricolage Grotesque"'), document.fonts.load('400 40px "Bricolage Grotesque"')]),
+    sleep(2500)
+  ]).catch(() => {});
+
+  function placeIndicator() {
+    const btn = state.mode === 'url' ? el.tabUrl : el.tabShot;
+    el.ind.style.width = btn.offsetWidth + 'px';
+    el.ind.style.transform = `translateX(${btn.offsetLeft}px)`;
+  }
+  function setMode(mode, focus) {
+    state.mode = mode;
+    const isUrl = mode === 'url';
+    el.tabUrl.setAttribute('aria-selected', isUrl);
+    el.tabShot.setAttribute('aria-selected', !isUrl);
+    el.tabUrl.tabIndex = isUrl ? 0 : -1;
+    el.tabShot.tabIndex = isUrl ? -1 : 0;
+    el.urlPanel.hidden = !isUrl;
+    el.shotPanel.hidden = isUrl;
+    el.examples.hidden = !isUrl;
+    placeIndicator();
+    hideErr();
+    if (focus) (isUrl ? el.tabUrl : el.tabShot).focus();
+  }
+  el.tabUrl.addEventListener('click', () => setMode('url'));
+  el.tabShot.addEventListener('click', () => setMode('shot'));
+  [el.tabUrl, el.tabShot].forEach((t) => t.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); setMode(state.mode === 'url' ? 'shot' : 'url', true); }
+  }));
+  addEventListener('resize', placeIndicator);
+  fontsReady.then(placeIndicator);
+  placeIndicator();
+
+  function showErr(t) { el.err.textContent = t; if (t) el.err.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+  function hideErr() { el.err.textContent = ''; }
+
+  function grid(canvas, fontPx, lineH) {
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const w = Math.max(1, canvas.clientWidth), h = Math.max(1, canvas.clientHeight);
+    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.font = `400 ${fontPx}px ${MONO}`;
+    ctx.textBaseline = 'top';
+    const cw = ctx.measureText('M').width;
+    return { ctx, w, h, cw, ch: lineH, cols: Math.floor(w / cw), rows: Math.floor(h / lineH), fontPx };
+  }
+  function paint(g, chars, mask, offX = 0, offY = 0) {
+    const { ctx } = g;
+    ctx.font = `400 ${g.fontPx}px ${MONO}`;
+    ctx.textBaseline = 'top';
+    const colors = [DIM, ACC, GREY];
+    for (let r = 0; r < chars.length; r++) {
+      const line = chars[r], m = mask[r];
+      for (let k = 0; k < 3; k++) {
+        let s = '', any = false;
+        for (let c = 0; c < line.length; c++) {
+          if (m[c] === k && line[c] !== ' ') { s += line[c]; any = true; } else s += ' ';
+        }
+        if (any) { ctx.fillStyle = colors[k]; ctx.fillText(s, offX, offY + r * g.ch); }
+      }
+    }
+  }
+
+  let blobG = null, blobRAF = 0, blobLast = 0, blobVisible = true;
+  const pointer = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
+  let blinkAt = -9999, nextBlink = 1800;
+  function blobFrame(t) {
+    const g = blobG; if (!g) return;
+    pointer.x += (pointer.tx - pointer.x) * 0.14;
+    pointer.y += (pointer.ty - pointer.y) * 0.14;
+    if (t > nextBlink) { blinkAt = t; nextBlink = t + 3500 + Math.random() * 3000; }
+    const bp = (t - blinkAt) / 340;
+    const bk = bp >= 0 && bp < 1 ? Math.sin(Math.PI * bp) : 0;
+    const open = Math.max(0.04, 1 - bk * bk * 0.96);
+    const W = g.cols * g.cw, H = g.rows * g.ch;
+    const cx = W / 2, cy = H / 2;
+    const a = Math.min(W * 0.47, H * 1.15), b = Math.min(a * 0.46, H * 0.46);
+    const R = b * 0.82;
+    const lx = Math.max(-1, Math.min(1, (pointer.x - 0.5) * 2.4)), ly = Math.max(-1, Math.min(1, (pointer.y - 0.5) * 2.4));
+    const ix = cx + lx * a * 0.4 + Math.sin(t * 0.0007) * a * 0.015, iy = cy + ly * b * 0.3 * open;
+    const chars = [], mask = [];
+    for (let r = 0; r < g.rows; r++) {
+      let line = ''; const m = new Uint8Array(g.cols);
+      const py = (r + 0.5) * g.ch - cy;
+      for (let c = 0; c < g.cols; c++) {
+        const px = (c + 0.5) * g.cw - cx;
+        const u = 1 - (px / a) * (px / a);
+        let chr = ' ', k = 0;
+        if (u > 0) {
+          const lim = b * open * Math.pow(u, 0.85);
+          const ay = Math.abs(py);
+          if (Math.abs(ay - lim) < g.ch * 0.62) { chr = '#'; k = 1; }
+          else if (ay < lim) {
+            const dx = (c + 0.5) * g.cw - ix, dy = (r + 0.5) * g.ch - iy, d = Math.sqrt(dx * dx + dy * dy);
+            const gx = dx + R * 0.34, gy = dy + R * 0.32;
+            if (d < R) {
+              if (Math.sqrt(gx * gx + gy * gy) < R * 0.14) { chr = ' '; }
+              else if (d < R * 0.4) { chr = '@'; k = 1; }
+              else if (d > R * 0.88) { chr = '#'; }
+              else { chr = '%#*+'[(c + r + Math.floor(d / 3)) % 4]; }
+            } else if ((r * 5 + c * 3) % 7 === 0) { chr = '.'; k = 2; }
+            else if (ay > lim * 0.82) { chr = ':'; k = 2; }
+          }
+        }
+        line += chr; m[c] = k;
+      }
+      chars.push(line); mask.push(m);
+    }
+    g.ctx.clearRect(0, 0, g.w, g.h);
+    paint(g, chars, mask);
+  }
+  function blobLoop(t) {
+    blobRAF = 0;
+    if (state.scanning || state.cells || !blobVisible) return;
+    if (t - blobLast > (t - blinkAt < 420 ? 16 : 40)) { blobLast = t; blobFrame(t); }
+    blobRAF = requestAnimationFrame(blobLoop);
+  }
+  function startBlob() {
+    blobG = grid(el.scope, 11, 13);
+    blobFrame(performance.now());
+    if (!reduce.matches && !blobRAF) blobRAF = requestAnimationFrame(blobLoop);
+  }
+  addEventListener('pointermove', (e) => {
+    const b = el.screen.getBoundingClientRect();
+    if (!b.width) return;
+    pointer.tx = (e.clientX - b.left) / b.width; pointer.ty = (e.clientY - b.top) / b.height;
+  });
+  el.screen.addEventListener('pointerdown', () => { const n = performance.now(); if (n - blinkAt > 3000) { blinkAt = n; nextBlink = n + 3500 + Math.random() * 3000; } });
+  new IntersectionObserver((es) => {
+    blobVisible = es[0].isIntersecting;
+    if (blobVisible && !blobRAF && !reduce.matches && !state.cells) blobRAF = requestAnimationFrame(blobLoop);
+  }).observe(el.screen);
+
+  function hsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2;
+    if (max === min) return [0, 0, l];
+    const d = max - min, s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    let h = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    return [h * 60, s, l];
+  }
+  const isViolet = (h, s, l) => h >= 235 && h <= 300 && s > 0.35 && l > 0.2 && l < 0.85;
+  const isNeon = (h, s, l) => s > 0.75 && l > 0.42 && l < 0.72;
+
+  function imageCells(img, cols, cw, ch) {
+    const rows = Math.max(1, Math.round(cols * (img.naturalHeight / img.naturalWidth) * (cw / ch)));
+    const c = document.createElement('canvas'); c.width = cols; c.height = rows;
+    const x = c.getContext('2d', { willReadFrequently: true });
+    x.fillStyle = '#fff'; x.fillRect(0, 0, cols, rows);
+    x.drawImage(img, 0, 0, cols, rows);
+    const d = x.getImageData(0, 0, cols, rows).data;
+    let lo = 1, hi = 0;
+    for (let p = 0; p < d.length; p += 4) { const l = (0.2126 * d[p] + 0.7152 * d[p + 1] + 0.0722 * d[p + 2]) / 255; if (l < lo) lo = l; if (l > hi) hi = l; }
+    const span = Math.max(0.2, hi - lo);
+    const light = isLight();
+    const chars = [], mask = [];
+    for (let r = 0; r < rows; r++) {
+      let line = ''; const m = new Uint8Array(cols);
+      for (let k = 0; k < cols; k++) {
+        const p = (r * cols + k) * 4;
+        const lum = (0.2126 * d[p] + 0.7152 * d[p + 1] + 0.0722 * d[p + 2]) / 255;
+        const dark = light ? 1 - (lum - lo) / span : (lum - lo) / span;
+        line += RAMP[Math.max(0, Math.min(RAMP.length - 1, Math.round(dark * (RAMP.length - 1))))];
+        const [h, s, l] = hsl(d[p], d[p + 1], d[p + 2]);
+        m[k] = isViolet(h, s, l) || isNeon(h, s, l) ? 1 : 0;
+      }
+      chars.push(line); mask.push(m);
+    }
+    return { chars, mask, cols, rows };
+  }
+
+  function textCells(text, cols, rows, cw, ch) {
+    const c = document.createElement('canvas'); c.width = Math.round(cols * cw); c.height = Math.round(rows * ch);
+    const x = c.getContext('2d', { willReadFrequently: true });
+    let size = c.height * 0.5;
+    x.font = `300 ${size}px ${DISPLAY}`;
+    const tw = x.measureText(text).width;
+    if (tw > c.width * 0.9) { size *= (c.width * 0.9) / tw; x.font = `300 ${size}px ${DISPLAY}`; }
+    x.fillStyle = '#000'; x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.fillText(text, c.width / 2, c.height / 2);
+    const d = x.getImageData(0, 0, c.width, c.height).data;
+    const chars = [], mask = [];
+    for (let r = 0; r < rows; r++) {
+      let line = ''; const m = new Uint8Array(cols);
+      for (let k = 0; k < cols; k++) {
+        let a = 0;
+        for (let sy = 0; sy < 3; sy++) for (let sx = 0; sx < 3; sx++) {
+          const px = Math.min(c.width - 1, Math.floor((k + (sx + 0.5) / 3) * cw)), py = Math.min(c.height - 1, Math.floor((r + (sy + 0.5) / 3) * ch));
+          a += d[(py * c.width + px) * 4 + 3];
+        }
+        a /= 9 * 255;
+        line += a > 0.5 ? '#' : a > 0.15 ? '+' : (r * 7 + k * 3) % 23 === 0 ? '.' : ' ';
+      }
+      chars.push(line); mask.push(m);
+    }
+    return { chars, mask, cols, rows };
+  }
+
+  async function scan(cells, msTotal = 1500) {
+    state.scanning = true;
+    if (blobRAF) { cancelAnimationFrame(blobRAF); blobRAF = 0; }
+    const g = grid(el.scope, 11, 13);
+    const rows = Math.min(g.rows, cells.rows);
+    const offX = Math.max(0, (g.w - cells.cols * g.cw) / 2);
+    const offY = Math.max(0, Math.floor((g.rows - rows) / 2) * g.ch);
+    const chars = cells.chars.slice(0, rows), mask = cells.mask.slice(0, rows);
+    if (reduce.matches) { g.ctx.clearRect(0, 0, g.w, g.h); paint(g, chars, mask, offX, offY); state.scanning = false; return; }
+    const t0 = performance.now();
+    await new Promise((done) => {
+      const step = (t) => {
+        const p = Math.min(1, Math.max(0, (t - t0) / msTotal));
+        const e = 1 - Math.pow(1 - p, 3);
+        const upto = Math.floor(e * rows);
+        g.ctx.clearRect(0, 0, g.w, g.h);
+        paint(g, chars.slice(0, upto), mask.slice(0, upto), offX, offY);
+        if (p < 1) {
+          const band = [], bm = [];
+          for (let r = upto; r < Math.min(rows, upto + 3); r++) {
+            let line = ''; const m = new Uint8Array(cells.cols).fill(r === upto ? 1 : 2);
+            for (const ch of chars[r]) line += ch !== ' ' || Math.random() < 0.08 ? SCRAMBLE[(Math.random() * SCRAMBLE.length) | 0] : ' ';
+            band.push(line); bm.push(m);
+          }
+          paint(g, band, bm, offX, offY + upto * g.ch);
+          requestAnimationFrame(step);
+        } else done();
+      };
+      requestAnimationFrame(step);
+    });
+    state.scanning = false;
+  }
+  function redrawScope() {
+    if (!state.cells) { startBlob(); return; }
+    const g = grid(el.scope, 11, 13);
+    const cells = state.img ? imageCells(state.img, g.cols, g.cw, g.ch) : textCells(state.last?.name || '', g.cols, g.rows, g.cw, g.ch);
+    state.cells = cells;
+    const rows = Math.min(g.rows, cells.rows);
+    paint(g, cells.chars.slice(0, rows), cells.mask.slice(0, rows), Math.max(0, (g.w - cells.cols * g.cw) / 2), Math.max(0, Math.floor((g.rows - rows) / 2) * g.ch));
+  }
+  let rT = 0;
+  addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { if (!state.scanning && !$('#viewCheck').classList.contains('hidden')) redrawScope(); if (state.last && !$('#viewCheck').classList.contains('hidden')) drawScore(el.scoreArt, state.last.score); }, 120); });
+
+  function log(label, value = '', hit = false) {
+    const li = document.createElement('li');
+    if (hit) li.className = 'hit';
+    const a = document.createElement('span'); a.textContent = label;
+    const b = document.createElement('b'); b.textContent = value;
+    li.append(a, b);
+    el.log.append(li);
+    while (el.log.children.length > 6) el.log.firstElementChild.remove();
+    if (window.Motion && !reduce.matches) Motion.animate(li, { opacity: [0, 1], y: [6, 0] }, { duration: 0.35, ease: [0.23, 1, 0.32, 1] });
+    return li;
+  }
+  const JOKES = ['asking the server nicely', 'checking for shadcn abuse', 'measuring the purple', 'counting rounded rectangles', 'looking for the word unlock', 'interrogating the box shadows', 'reading the em dashes aloud', 'searching for a glowing orb'];
+  function jokes() {
+    let i = 0, alive = true;
+    const li = log(JOKES[0], '...');
+    const id = setInterval(() => { if (!alive) return; i = (i + 1) % JOKES.length; li.firstChild.textContent = JOKES[i]; }, 900);
+    return () => { alive = false; clearInterval(id); li.remove(); };
+  }
+
+  async function timed(url, ms, opts = {}) {
+    const c = new AbortController(); const id = setTimeout(() => c.abort(), ms);
+    try {
+      const r = await fetch(url, { ...opts, signal: c.signal });
+      if (!r.ok) throw new Error('http ' + r.status);
+      return r;
+    } finally { clearTimeout(id); }
+  }
+  function loadImage(src, cors) {
+    return new Promise((res, rej) => {
+      const i = new Image();
+      if (cors) i.crossOrigin = 'anonymous';
+      i.onload = () => res(i); i.onerror = rej; i.src = src;
+    });
+  }
+  const bodyText = (h) => {
+    try {
+      const d = new DOMParser().parseFromString(h, 'text/html');
+      d.querySelectorAll('script, style, noscript, template, #lovable-badge').forEach((n) => n.remove());
+      return (d.body?.textContent || '').replace(/\s+/g, ' ').trim();
+    } catch { return ''; }
+  };
+  async function getRendered(url) {
+    const base = 'https://api.microlink.io/?url=' + encodeURIComponent(url) + '&screenshot=true&meta=false&viewport.width=1280&viewport.height=860';
+    let j = null;
+    try { j = await (await timed(base + '&data.html.selector=html&data.html.attr=html', 30000)).json(); if (j.status !== 'success') j = null; } catch {}
+    if (!j) j = await (await timed(base, 25000)).json();
+    const src = j?.data?.screenshot?.url;
+    const img = src ? await loadImage(src, true).catch(() => null) : null;
+    return { html: j?.data?.html || '', img };
+  }
+  async function getJina(url) {
+    const r = await timed('https://r.jina.ai/' + url, 18000, { headers: { 'X-Return-Format': 'html' } });
+    return r.text();
+  }
+  async function getProxy(url) {
+    const r = await timed('https://api.allorigins.win/raw?url=' + encodeURIComponent(url), 15000);
+    return r.text();
+  }
+  async function getBundle(html, base) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const s = doc.querySelector('script[type="module"][src]') || [...doc.querySelectorAll('script[src]')].find((x) => /index|main|app/.test(x.getAttribute('src')));
+    if (!s) return '';
+    const src = new URL(s.getAttribute('src'), base).href;
+    const r = await timed('https://r.jina.ai/' + src, 20000, { headers: { 'X-Return-Format': 'text' } });
+    return r.text();
+  }
+  async function getCss(html, base) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const inline = [...doc.querySelectorAll('style')].map((s) => s.textContent).join('\n');
+    const links = [...doc.querySelectorAll('link[rel~="stylesheet"]')].slice(0, 4).map((l) => { try { return new URL(l.getAttribute('href'), base).href; } catch { return ''; } }).filter(Boolean);
+    const parts = await Promise.all(links.map((u) => timed(u, 4000).then((r) => r.text()).catch(() => '')));
+    return inline + '\n' + parts.join('\n');
+  }
+
+  const clip = (s, n = 120) => { s = (s || '').replace(/\s+/g, ' ').trim(); return s.length > n ? s.slice(0, n - 1).trim() + '…' : s; };
+  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  function textOf(el) {
+    if (!el) return '';
+    const tw = (el.ownerDocument || document).createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const out = []; let n;
+    while ((n = tw.nextNode())) out.push(n.nodeValue);
+    return out.join(' ').replace(/\s+/g, ' ').replace(/\s([,.!?:;])/g, '$1').trim();
+  }
+  const cls = (el) => el.getAttribute('class') || '';
+  function sentenceWith(text, re) {
+    const m = text.match(new RegExp('[^.!?“”"]{0,90}' + re.source + '[^.!?“”"]{0,90}', re.flags.replace('g', '')));
+    return m ? clip(m[0], 130) : null;
+  }
+
+  const N = (t) => ({ note: t });
+  function bundleToHtml(js) {
+    const out = [];
+    const re = /jsxs?\(\s*"([a-z][a-z0-9]*)"\s*,\s*\{([^{}]{0,800})\}/g;
+    let m, n = 0;
+    while ((m = re.exec(js)) && n++ < 6000) {
+      const props = m[2];
+      const c = (props.match(/className:\s*"([^"]*)"/) || [])[1] || '';
+      const kid = (props.match(/children:\s*\[?\s*"((?:[^"\\]|\\.){1,400})"/) || [])[1] || '';
+      const src = (props.match(/src:\s*"([^"]*)"/) || [])[1];
+      let t = kid; try { t = JSON.parse('"' + kid + '"'); } catch {}
+      out.push(`<${m[1]} class="${esc(c)}"${src ? ` src="${esc(src)}"` : ''}>${esc(t)}</${m[1]}>`);
+    }
+    return '<body>' + out.join('\n') + '</body>';
+  }
+
+  const BUZZ = ['unlock', 'unleash', 'elevate', 'empower', 'supercharge', 'seamless', 'effortless', 'revolutioni', 'game-chang', 'cutting-edge', 'state-of-the-art', 'next-level', 'leverage', 'streamline', 'robust', 'innovative', 'comprehensive', 'tailored', 'holistic', 'synergy', 'world-class', 'best-in-class', 'transform your', 'take your', 'boost your', 'skyrocket', 'harness', 'unparalleled', 'delve', 'ever-evolving', 'fast-paced', 'in today’s', 'in today\'s', 'peace of mind', 'top-notch', 'exceptional', 'look no further', 'dive into', 'empowering', 'one-stop', 'hassle-free', 'stunning', 'all-in-one', 'next generation', 'like never before', 'at your fingertips', 'reimagin'];
+  const HERO_CLICHE = [
+    /^(discover|unlock|elevate|transform|empower|supercharge|revolutioni[sz]e|reimagine|experience|unleash|welcome to|introducing|meet the future)\b/i,
+    /\byour\s+[a-z]+,\s*our\s+[a-z]+/i,
+    /\b(the future of|next[- ]generation|all[- ]in[- ]one|made (simple|easy|effortless)|at your fingertips|like never before|one platform|seamless(ly)?|effortless(ly)?|10x|ai[- ]powered|powered by ai)\b/i,
+    /\b(find the perfect|we create solutions|solutions for your business|build your dream|to the next level|grow your business|everything you need|redefin(e|ing)|elevate your|your journey)\b/i
+  ];
+  const TEMPLATE_HEADINGS = [
+    /^(our )?services$/, /^why choose\b/, /^what (our )?(clients|customers|users|people|students|members) (say|are saying)/, /^how it works$/, /^(our |key |powerful |amazing )?features$/,
+    /^testimonials$/, /^ready to (get started|transform|take|start|join|elevate|boost|begin|experience)/, /^get in touch$/, /^(contact us|about us)$/, /^meet (our|the) (team|experts)/,
+    /^(our )?mission$/, /^join (thousands|our community|the)/, /^trusted by/, /^(simple|transparent|simple, transparent|flexible) pricing/, /^we provide the best/,
+    /^our (story|values|process|clients|partners|team|work)$/, /^(everything|all) you need/, /^(choose|pick|find) (the|your) (right |perfect )?plan/, /^start your .{0,30} today/,
+    /^(join|subscribe to) our newsletter/, /^why us\??$/, /^stay (updated|in the loop)/, /^(get|let’s get|let's get) started/
+  ];
+  const STOCK = /images\.unsplash\.com|plus\.unsplash\.com|source\.unsplash\.com|images\.pexels\.com|cdn\.pixabay\.com|placeholder\.svg|via\.placeholder\.com|placehold\.(co|it)|picsum\.photos|randomuser\.me|i\.pravatar\.cc|ui-avatars\.com|dummyimage\.com|loremflickr/;
+  const COMMON_FONTS = /^(inter|inter var|inter tight|geist|geist sans|geist mono|poppins|roboto|open sans|montserrat|lato|plus jakarta sans|dm sans|manrope|nunito|raleway|playfair display|space grotesk|outfit|system-ui|sans-serif|serif|monospace|arial|helvetica|helvetica neue|-apple-system|blinkmacsystemfont|segoe ui|ui-sans-serif|ui-serif|ui-monospace|apple color emoji|segoe ui emoji|segoe ui symbol|noto color emoji|noto sans|times|times new roman|georgia|menlo|monaco|consolas|courier|courier new|sf mono|sfmono-regular|liberation mono|cambria|inherit|initial|emoji|math|fangsong|cursive)$/;
+
+  const isOwner = (h) => /(^|\.)slopcheck-langzy\.vercel\.app$/.test(h || '');
+  function analyze({ html = '', raw = '', css = '', img = null, bundle = '', host = '' }) {
+    const F = [], C = [];
+    const add = (cat, key, label, pts, roast, why, quotes = []) => F.push({ cat, key, label, pts: Math.round(pts), roast, why, quotes: quotes.filter(Boolean).slice(0, 3) });
+    const credit = (label, pts, detail) => C.push({ label, pts, detail });
+    const all = (raw + '\n' + html).toLowerCase();
+
+    const metaAuthor = all.match(/<meta[^>]+name=["'](?:author|generator)["'][^>]+content=["']([^"']+)/)?.[1] || '';
+    const fp = [
+      [/id=["']lovable-badge|edit with lovable|lovable generated project|lovable-tagger|data-lov-id|gpteng\.co|\/lovable-uploads\//, /lovable/, 'Lovable'],
+      [/data-v0-t|built with v0/, /\bv0\b/, 'v0'],
+      [/bolt-preview|made with bolt/, /\bbolt\b/, 'Bolt'],
+      [/create\.xyz\/|same\.new\//, /create\.xyz|same/, 'an AI app builder']
+    ].find(([re, mre]) => re.test(all) || mre.test(metaAuthor.toLowerCase()));
+    if (fp) {
+      const marker = /edit with lovable/.test(all) ? 'an “Edit with Lovable” badge' : /lovable generated project/.test(all) ? 'meta description: “Lovable Generated Project”' : metaAuthor ? `meta author: “${metaAuthor}”` : `${fp[2]} markers in the source`;
+      add('fingerprint', 'gen', 'builder signature', 30, `we found the receipt. it says ${fp[2]}.`, 'This is not a pattern guess. The site carries the builder’s own markers, left in the shipped page.', [N(marker)]);
+    }
+    const title = (all.match(/<title[^>]*>([^<]*)/)?.[1] || '').trim();
+    if (/^(vite \+ react( \+ ts)?|create next app|react app|my v0 project|lovable app|vite app|next\.js app)$/.test(title)) {
+      add('fingerprint', 'title', 'default page title', 14, 'the tab still says the framework’s name. nobody read this page.', 'The page title is still the starter template’s default, so the page shipped without anyone finishing it.', [N(`<title>${title}</title>`)]);
+    }
+
+    let doc = new DOMParser().parseFromString(html || '<body></body>', 'text/html');
+    doc.querySelectorAll('script, style, noscript, template, iframe').forEach((n) => n.remove());
+    let text = textOf(doc.body);
+    const fromBundle = text.length < 200 && bundle.length > 1000;
+    if (fromBundle) { doc = new DOMParser().parseFromString(bundleToHtml(bundle), 'text/html'); text = textOf(doc.body); }
+    const words = text ? text.split(' ').length : 0;
+    const low = text.toLowerCase();
+    const els = [...doc.body.querySelectorAll('*')];
+    const heads = [...doc.querySelectorAll('h1, h2, h3')].filter((h) => textOf(h).length > 1);
+    const leaves = els.filter((e) => !e.children.length).map(textOf).filter((t) => t.length > 20);
+    const around = (re, left = 70) => {
+      for (const t of leaves) {
+        const m = t.match(re);
+        if (m) { let a = Math.max(0, m.index - left), b = Math.min(t.length, m.index + m[0].length + 70); if (a) a = t.indexOf(' ', a) + 1 || a; if (b < t.length) b = t.lastIndexOf(' ', b) > m.index ? t.lastIndexOf(' ', b) : b; return (a ? '\u2026' : '') + t.slice(a, b).trim() + (b < t.length ? '\u2026' : ''); }
+      }
+      if (!left) { const m = text.match(re); return m ? clip(text.slice(m.index).split(/[.!?]\s/)[0], 130) : null; }
+      return sentenceWith(text, re);
+    };
+    const h1 = doc.querySelector('h1') || doc.querySelector('h2');
+    const h1t = clip(textOf(h1), 110);
+
+    if (h1t && HERO_CLICHE.some((re) => re.test(h1t))) {
+      add('copy', 'hero', 'stock hero headline', 13, 'your headline could sell literally anything.', 'Generators open with a vague promise because they don’t know what you sell. A good first line names the thing and who it’s for.', [h1t]);
+    }
+    const buzz = BUZZ.map((b) => [b, low.split(b).length - 1]).filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
+    const buzzN = buzz.reduce((s, [, n]) => s + n, 0);
+    const density = words ? (buzzN / words) * 1000 : 0;
+    if (buzzN >= 3 && density >= 4) {
+      const quotes = buzz.slice(0, 2).map(([b]) => around(new RegExp(b.replace(/[-]/g, '\\-'), 'i')));
+      const top = buzz[0][0];
+      add('copy', 'buzz', 'marketing filler', Math.min(16, 4 + density * 1.2), buzz[0][1] > 1 ? `“${top}” ${buzz[0][1]} times. a robot committee approved every one.` : `“${top}”, “${buzz[1]?.[0] || top}”. the copy was written by a pitch deck.`, `${buzzN} filler words in ${words} words of copy. These are what a model writes when it has no specific fact to offer: swap each for a number, a material, a step or a name.`, quotes);
+    } else if (words > 150 && density < 1.5) credit('no filler words', 6, buzzN ? `${buzzN} filler word${buzzN > 1 ? 's' : ''} in ${words} words. Basically clean.` : `${words} words of copy and not one “seamless” or “unlock”.`);
+
+    const tHeads = heads.slice(1).map((h) => textOf(h)).filter((t) => t.length < 60 && TEMPLATE_HEADINGS.some((re) => re.test(t.toLowerCase().replace(/[?!.]+$/, ''))));
+    if (tHeads.length >= 2) add('copy', 'sections', 'template section names', Math.min(15, tHeads.length * 3.5), `“${tHeads[0]}”, “${tHeads[1]}”. the landing page template’s table of contents.`, 'These are the default section names of every landing page template. They label the section instead of saying anything about you.', tHeads);
+
+    const stats = [];
+    for (const e of els) {
+      if (e.children.length) continue;
+      const t = textOf(e);
+      if (/^[$€£]?\d[\d,.]*\s?(k|m|b)?\s?(\+|%)$|^\d+\/7$|^\d+(k|m)\+?$/i.test(t)) {
+        const label = textOf(e.nextElementSibling || e.parentElement?.nextElementSibling);
+        stats.push(clip(t + (label && label.length < 40 ? ' ' + label : ''), 40));
+      }
+    }
+    if (stats.length >= 3 && stats.filter((t) => /\+/.test(t)).length >= 2) add('copy', 'stats', 'round-number brag row', Math.min(10, 5 + stats.length), `${stats.slice(0, 3).map((s) => s.split(' ')[0]).join(', ')}. numbers with a plus sign, sourced from nowhere.`, 'A row of round numbers with plus signs is the most generated element on the internet. Real proof has units, dates and somewhere to check it.', [stats.slice(0, 4).join('   ')]);
+
+    const stars = (text.match(/\u2605/g) || []).length + doc.querySelectorAll('svg[class*="star"], [class*="lucide-star"]').length;
+    if (stars >= 5) {
+      const q = els.map(textOf).find((t) => /^[“"]/.test(t) && t.length > 40 && t.length < 260);
+      add('copy', 'testimonials', 'five-star testimonials', 9, 'five stars from “sarah m., marketing director”. sure.', 'Star ratings over quotes from first names and job titles read as placeholders, because generators write them for every site.', [q ? clip(q, 120) : N(`${stars} star icons`)]);
+    }
+    let emoji = [];
+    try {
+      for (const e of els) {
+        if (e.children.length > 1) continue;
+        const t = textOf(e);
+        if (t && t.length < 70) { const m = t.match(/^\s*(\p{Extended_Pictographic})/u); if (m && !/[\u00a9\u00ae\u2122\u2764]/.test(m[1])) emoji.push(m[1]); }
+      }
+    } catch {}
+    if (emoji.length >= 3) add('copy', 'emoji', 'emoji as icons', Math.min(10, 4 + emoji.length), `${emoji.length} emoji doing an icon’s job. the designer was a group chat.`, 'Emoji standing in for icons and bullets, at the start of card titles and list items, is a hallmark of one-shot generated pages.', [N([...new Set(emoji)].slice(0, 8).join(' '))]);
+    const prose = els.filter((e) => !e.children.length && textOf(e).length > 50).map(textOf).join(' ');
+    const dashes = (prose.match(/\u2014/g) || []).length;
+    if (dashes >= 3 && (dashes / Math.max(words, 1)) * 1000 >= 5) add('copy', 'dash', 'em dash habit', Math.min(12, 4 + dashes), `${dashes} em dashes. the model left fingerprints on the copy.`, 'Models reach for the em dash constantly. Three or more in short marketing copy is one of the strongest text tells there is.', [around(/\u2014/)]);
+    const nj = around(/\b(?:not just|isn['’]t just|more than just)\b/i);
+    if (nj) add('copy', 'notjust', '“not just x” line', 6, '“it’s not just a tool, it’s a movement.” it’s a tool.', '“Not just X, it’s Y” is the single most common AI sentence shape.', [nj]);
+    const beat = text.match(/\b[A-Z][a-z]{2,9}\. [A-Z][a-z]{2,9}\. [A-Z][a-z]{2,9}\./);
+    if (beat) add('copy', 'beat', 'three-beat slogan', 7, `“${beat[0].toLowerCase()}” a haiku written by a landing page.`, 'Three one-word sentences in a row is a slogan formula, not a voice.', [beat[0]]);
+    const navLinks = [...doc.querySelectorAll('nav a, header a, nav button, header button')].map(textOf).map((t) => t.toLowerCase());
+    if (navLinks.includes('home') && navLinks.filter((t) => /^(about|about us|services|contact|contact us|testimonials)$/.test(t)).length >= 2) {
+      add('copy', 'nav', 'template navigation', 6, 'home, about us, services, contact us. a nav from 2009, generated in 2026.', 'A “Home” link plus About, Services and Contact is the nav of a template nobody edited. Visitors know where home is: it’s the logo.', [N(navLinks.filter((t) => t.length < 20).slice(0, 6).join('   '))]);
+    }
+    const btn = [...doc.querySelectorAll('a, button')].map(textOf).map((t) => t.toLowerCase());
+    if (btn.some((t) => /^get started/.test(t)) && btn.some((t) => /^learn more/.test(t))) add('copy', 'ctas', 'default buttons', 5, '“get started” and “learn more.” the two buttons of the apocalypse.', 'The two default calls to action. Name the action instead: what actually happens when I click?', [N('Get Started   Learn More')]);
+
+    const boldHeads = heads.filter((h) => /\bfont-(bold|extrabold|black)\b/.test(cls(h)) || /font-weight:\s*(7|8|9)00/.test(h.getAttribute('style') || ''));
+    const classedHeads = heads.filter((h) => cls(h));
+    if (h1 && boldHeads.includes(h1) && classedHeads.length && boldHeads.length / classedHeads.length > 0.5) {
+      add('layout', 'bold', 'bold everything', 8, 'every headline is shouting. font-bold is not a personality.', 'Generators default to heavy, tightly packed headlines. Studio-made sites usually set display type lighter and let size and space do the work.', [N(`<h1 class="${clip(cls(h1).split(' ').filter((c) => /font-|text-\d|text-\[/.test(c)).join(' '), 60)}">`), N(`${boldHeads.length} of ${classedHeads.length} headings are bold`)]);
+    }
+    if (h1 && /\bfont-(thin|extralight|light|normal)\b/.test(cls(h1))) credit('light display type', 4, 'Your headline is set light, not bold. That takes nerve.');
+    const gtext = els.filter((e) => /bg-clip-text|background-clip:\s*text/.test(cls(e) + (e.getAttribute('style') || '')) && textOf(e));
+    if (gtext.length) add('layout', 'gtext', 'gradient text', Math.min(14, 9 + gtext.length * 1.5), 'gradient text. your headline is wearing tie-dye to a job interview.', 'Gradient-filled headings have been the signature move of AI landing pages since 2023.', gtext.slice(0, 2).map((e) => clip(textOf(e), 60)));
+    const orbs = els.filter((e) => { const c = cls(e); return /\bblur-(2xl|3xl|\[\d{2,}px\])/.test(c) && /\b(absolute|fixed)\b/.test(c) && /\brounded-full\b/.test(c) && /\b(bg|from)-[a-z]+-\d00/.test(c); });
+    if (orbs.length >= 1) add('layout', 'orbs', 'glowing orbs', Math.min(12, 6 + orbs.length * 2), 'there is a glowing orb behind your hero and it has no job.', 'Blurred colour blobs floating behind content are decoration with no job, and a default of most AI templates.', [N(`${orbs.length} blurred blob${orbs.length > 1 ? 's' : ''}: <div class="${clip(cls(orbs[0]), 70)}">`)]);
+    if (h1 && !fromBundle) {
+      let badge = null, node = h1;
+      for (let up = 0; up < 3 && node && !badge; up++, node = node.parentElement) {
+        let sib = node.previousElementSibling;
+        for (let k = 0; k < 2 && sib && !badge; k++, sib = sib.previousElementSibling) {
+          const pill = /\brounded-full\b/.test(cls(sib)) ? sib : sib.querySelector?.('[class*="rounded-full"]');
+          const t = textOf(pill);
+          if (pill && t.length > 2 && t.length < 60) badge = t;
+        }
+      }
+      if (badge) add('layout', 'badge', 'announcement pill', 8, 'a little pill above the headline announcing something. groundbreaking.', 'A rounded badge above the headline (“New”, “Introducing”, “Backed by”) is the first line of nearly every generated hero.', [badge]);
+    }
+    let gridQuote = null, grids = 0;
+    for (const g of els) {
+      if (!/\bgrid-cols-(3|4)\b|:grid-cols-(3|4)\b/.test(cls(g)) || g.children.length < 3 || g.children.length > 12) continue;
+      const kids = [...g.children];
+      const iconCards = kids.filter((k) => (k.querySelector('svg') || /^\s*\p{Extended_Pictographic}/u.test(textOf(k))) && k.querySelector('h3, h4, h5') && k.querySelector('p'));
+      if (iconCards.length >= 3 && !iconCards.some((k) => /[$\u20ac\u00a3\u20b9]\s?\d|\/\s?mo\b|per month/i.test(textOf(k)))) { grids++; if (!gridQuote) gridQuote = iconCards.slice(0, 4).map((k) => textOf(k.querySelector('h3, h4, h5'))).join(', '); }
+    }
+    if (grids) add('layout', 'cards', 'icon card grids', Math.min(14, 6 + grids * 3), 'icon, title, one sentence, times three. the holy trinity.', 'Icon plus title plus one-line blurb in an even grid is how a model fills a features section when it has nothing to show.', [N(`${grids} grid${grids > 1 ? 's' : ''} of icon cards: ${clip(gridQuote, 80)}`)]);
+
+    const imgs = [...doc.querySelectorAll('img[src], img[srcset], [style*="background"]')].map((e) => (e.getAttribute('src') || '') + ' ' + (e.getAttribute('srcset') || '') + ' ' + (e.getAttribute('style') || ''));
+    const stock = imgs.filter((s) => STOCK.test(s)).length + (fromBundle ? (bundle.match(new RegExp(STOCK.source, 'g')) || []).length : 0);
+    if (stock) {
+      const kinds = [...new Set([...imgs, bundle].join(' ').match(new RegExp(STOCK.source, 'g')) || [])].map((d) => /unsplash/.test(d) ? 'Unsplash' : /pexels/.test(d) ? 'Pexels' : /pravatar|randomuser|ui-avatars/.test(d) ? 'fake avatars' : 'placeholders');
+      add('layout', 'stock', 'stock photos', Math.min(18, 9 + stock * 1.5), `${stock} stock photo${stock > 1 ? 's' : ''}. handshake not found, but close.`, 'Unsplash shots, placeholder images and generated avatars are what a builder grabs when it has no real pictures of your product, place or people.', [N(`${stock} images from ${[...new Set(kinds)].join(', ')}`)]);
+    } else {
+      const own = imgs.filter((s) => /\.(jpe?g|png|webp|avif)|_next\/image|framerusercontent|imgix|cloudinary/.test(s) && !/icon|logo|avatar|favicon/.test(s)).length;
+      if (own >= 2) credit('real imagery', 4, `${own} images of your own and not one stock photo.`);
+    }
+    const palette = [...doc.querySelectorAll('a, button')].map(cls).map((c) => c.match(/\b(?:bg|from)-(blue|indigo|purple|violet|green|emerald|teal|cyan|sky|orange|amber|pink|rose|red|lime|fuchsia|yellow)-(400|500|600|700)\b/)?.[0]).filter(Boolean);
+    if (palette.length >= 2) add('layout', 'palette', 'stock tailwind colours', Math.min(9, 4 + palette.length), `${palette[0]} on the buttons. the brand colour was never chosen.`, 'Buttons in Tailwind’s stock palette mean the colour came with the template rather than from a decision about the brand.', [N([...new Set(palette)].slice(0, 3).join('   '))]);
+    const lucide = doc.querySelectorAll('svg[class*="lucide"]');
+    if (lucide.length >= 12) {
+      const names = [...new Set([...lucide].map((s) => (cls(s).match(/lucide-([a-z0-9-]+)/) || [])[1]).filter(Boolean))].slice(0, 5);
+      add('layout', 'lucide', 'lucide icon on every noun', Math.min(7, 3 + lucide.length / 8), `${lucide.length} lucide icons. we can read, we promise.`, 'Lucide is the default icon set of shadcn and every AI builder. One on every item adds noise, not meaning.', [N(names.join(', '))]);
+    }
+    const shadcnHits = ['222.2 84% 4.9%', '222.2 47.4% 11.2%', '215.4 16.3% 46.9%', '214.3 31.8% 91.4%', 'oklch(0.145 0 0)', 'oklch(0.205 0 0)', 'oklch(0.556 0 0)', 'oklch(0.922 0 0)'].filter((v) => (css + raw).includes(v));
+    if (shadcnHits.length >= 2) add('layout', 'shadcn', 'untouched shadcn theme', 11, 'shadcn defaults, untouched. a rental car with the plastic still on the seats.', 'The colour tokens still match shadcn’s defaults to the decimal: the components were installed and never styled.', [N(`default tokens: ${shadcnHits.slice(0, 3).join('   ')}`)]);
+
+    const families = new Set();
+    for (const m of (css + '\n' + raw).matchAll(/font-family\s*:\s*([^;}{]+)/gi)) m[1].split(',').forEach((f) => families.add(f.replace(/["'()!]|important/g, '').trim().toLowerCase()));
+    for (const m of raw.matchAll(/fonts\.googleapis\.com\/css2?\?family=([^"'&]+)/gi)) decodeURIComponent(m[1]).split('|').forEach((f) => families.add(f.split(':')[0].replace(/\+/g, ' ').toLowerCase()));
+    const real = [...families].filter((f) => f && f.length < 40 && !f.startsWith('var(') && !f.startsWith('__') && !/fallback|icon|awesome|symbols|katex|mathjax/.test(f));
+    const squash = (f) => f.replace(/[\s_-]+/g, '');
+    const commonSquashed = COMMON_FONTS.source.slice(2, -2).split('|').map(squash);
+    const custom = [...new Set(real.filter((f) => !COMMON_FONTS.test(f) && !commonSquashed.includes(squash(f)) && !/^(geist|inter)/.test(squash(f))))];
+    if (custom.length) credit('chosen typeface', 6, `Custom type: ${custom.slice(0, 2).map((f) => f.replace(/\b\w/g, (c) => c.toUpperCase())).join(', ')}. Someone made a decision.`);
+    else {
+      const def = real.find((f) => /^(inter|poppins|montserrat|plus jakarta sans|dm sans|roboto|open sans|playfair display)$/.test(f));
+      if (def) add('layout', 'font', 'default font', 4, `${def}. a fine font. so are the other 400,000 sites using it.`, 'Not proof on its own, but every generator defaults to the same five fonts.', [N(`font-family: ${def}`)]);
+    }
+
+    const nit = (key, label, pts, roast, why, quotes = []) => { if (!F.some((f) => f.key === key)) add('nitpick', key, label, pts, roast, why, quotes); };
+    if (/\/_next\//.test(all)) nit('next', 'next.js', 3, 'next.js, probably on vercel. you and every other developer alive.', 'Not a crime. Just the most common stack on the internet right now, which makes it the default look too.', [N(/_vercel\/insights|vercel/.test(all) ? '/_next/ assets and Vercel analytics' : '/_next/ assets')]);
+    if ([...families].some((f) => /^geist/.test(f.replace(/\s/g, '')))) nit('geist', 'geist', 3, 'geist. vercel’s font, on vercel’s framework. very on brand.', 'Geist is lovely, and it ships as the default of create-next-app, so it reads as “didn’t pick”.', [N('font-family: Geist')]);
+    const toggle = [...doc.querySelectorAll('button, [role="switch"]')].find((b) => /theme|dark|light mode/i.test((b.getAttribute('aria-label') || '') + ' ' + (b.getAttribute('title') || '') + ' ' + textOf(b)));
+    if (toggle) nit('toggle', 'theme toggle', 3, 'a dark mode toggle. the developer portfolio’s secret handshake.', 'Every developer site has one. Nobody has ever pressed it twice.', [N(`<button aria-label="${clip(toggle.getAttribute('aria-label') || textOf(toggle) || 'toggle theme', 40)}">`)]);
+    if (/\bcontributions?\b/i.test(text)) nit('contrib', 'contribution graph', 4, 'a github contribution graph. we get it, you commit.', 'A wall of little green squares is the developer portfolio’s version of a stat row.', [N((text.match(/\b[\d,]+\s+contributions?\b[^.]{0,24}/i) || ['a GitHub-style contribution graph'])[0].replace(/\s+Less\s+More.*$/, ''))]);
+    const stackHead = heads.map(textOf).find((t) => /^(tech(nology)? stack|my stack|stack|tools i use|technologies|skills|tools & technologies)$/i.test(t)) || els.map(textOf).find((t) => /^tech stack$/i.test(t));
+    if (stackHead) nit('stack', 'tech stack wall', 4, 'a tech stack logo wall. the developer’s trophy cabinet.', 'A grid of framework logos tells visitors what you used, not what you made.', [stackHead]);
+    const bio = around(/\b(obsess(ing|ed)? over (the )?(small |little )?details|pixel[- ]perfect|passionate about|i love building|crafting (beautiful|delightful|digital)|turning ideas into|tinkerer|i build (things|products|stuff) for the web)\b/i, 0);
+    if (bio) nit('bio', 'portfolio bio line', 4, '“obsessing over small details”. said every portfolio, ever.', 'A line every developer portfolio shares. Swap it for one specific thing you did.', [bio]);
+    const aiPow = around(/\bai[- ]powered\b/i);
+    if (aiPow && !F.some((f) => f.key === 'hero')) nit('aipow', '“AI-powered”', 3, '“AI-powered”. sir, this is a website.', 'In 2026 everything is AI-powered, so saying so tells the visitor nothing.', [aiPow]);
+    const prompt = [...doc.querySelectorAll('textarea[placeholder], input[placeholder]')].map((i) => i.getAttribute('placeholder')).find((t) => /describe|what do you want|what are you|ask (me )?anything|build|prompt|imagine|idea/i.test(t));
+    if (prompt) nit('prompt', 'prompt box hero', 4, 'a prompt box hero. the AI startup’s “hello world”.', 'A big text box asking what you want to build is the opening scene of every AI product launched since 2024.', [prompt]);
+    const col = els.filter((e) => /\bmx-auto\b/.test(cls(e)) && /\bmax-w-(xl|2xl|3xl|prose)\b/.test(cls(e)));
+    if (col.length >= 2) nit('column', 'one centered column', 3, `one centered ${cls(col[0]).match(/max-w-\S+/)[0]} column. the portfolio uniform.`, 'A single narrow centred column is the default shape of a developer site. Safe, readable, and identical to the last ten.', [N(`${col.length} × mx-auto ${cls(col[0]).match(/max-w-\S+/)[0]}`)]);
+    const rounds = els.filter((e) => /\brounded-(xl|2xl|3xl)\b/.test(cls(e))).length;
+    if (rounds >= 8 && !F.some((f) => f.key === 'cards')) nit('round', 'soft corners', 3, `rounded-2xl, ${rounds} times. the corners have never been softer.`, 'Big radii on everything is Tailwind’s house style. Pick one radius and mean it.', [N(`${rounds} elements with rounded-xl or bigger`)]);
+    const glass = els.filter((e) => /\bbackdrop-blur/.test(cls(e))).length;
+    if (glass >= 2) nit('glass', 'frosted glass', 3, 'frosted glass nav. tasteful, but we noticed.', 'Backdrop blur is the most copied effect of the last five years. Tasteful in moderation, a tell in bulk.', [N(`${glass} backdrop-blur elements`)]);
+    const fades = els.filter((e) => /opacity:\s*0[;\s]/.test(e.getAttribute('style') || '') && /transform|translate/.test(e.getAttribute('style') || '')).length;
+    if (fades >= 3) nit('fade', 'fade-in on load', 3, 'everything fades up on load. the site does a little curtsy.', 'Staggered fade-ups on every block is the default motion of AI and template sites alike.', [N(`${fades} elements start invisible and slide in`)]);
+    const lucideN = doc.querySelectorAll('svg[class*="lucide"]').length;
+    if (lucideN >= 3 && lucideN < 12) nit('lucidelite', 'lucide icons', 2, `${lucideN} lucide icons. the shadcn starter pack is showing.`, 'Lucide is the default icon set of every Next.js starter.', [N(`${lucideN} lucide icons`)]);
+    if (doc.querySelector('[data-slot]') && !F.some((f) => f.key === 'shadcn')) nit('shadcnlite', 'shadcn, seasoned', 3, 'shadcn components, lightly seasoned.', 'Restyled, which is good. Still shadcn underneath, which we can see.', [N('data-slot attributes')]);
+    const dashAll = (text.match(/\u2014/g) || []).length;
+    if (dashAll && !F.some((f) => f.key === 'dash')) nit('dashlite', 'em dash', 2, dashAll > 1 ? `${dashAll} em dashes. we saw that.` : 'one em dash. we saw that.', 'Probably human. Still, the em dash is the model’s favourite punctuation, so it gets a mention.', [around(/\S+\s?\u2014\s?\S+/)]);
+    let oneEmoji = []; try { oneEmoji = (text.match(/\p{Extended_Pictographic}/gu) || []).filter((e) => !/[\u00a9\u00ae\u2122\u2764]/.test(e)); } catch {}
+    if (oneEmoji.length && !F.some((f) => f.key === 'emoji')) nit('emojilite', 'stray emoji', 2, `one ${oneEmoji[0]}. the gen z seal of approval.`, 'A single emoji in a heading is harmless, and also exactly what a model adds to sound friendly.', [around(/.{0,40}\p{Extended_Pictographic}/u)]);
+
+    if (/(^|\.)make\.design$/.test(host)) C.push({ label: 'conflict of interest', pts: 17, house: true, detail: 'make.design is made by the same person who made slopcheck. We roasted it anyway, then went easy on the score. Declared, so it’s fine.' });
+
+    if (isOwner(host)) {
+      F.length = 0;
+      C.push({ label: 'site owner', pts: 0, house: true, fixed: 4, detail: 'This is the site of the person who made Cek AI Slop. The score is set by the owner, not measured. Declared, so it is fine.' });
+    }
+    if (img && !isOwner(host)) F.push(...analyzePixels(img));
+    return { findings: F, credits: C, fromBundle, words };
+  }
+
+  function analyzePixels(img) {
+    const W = 200, srcH = Math.min(img.naturalHeight, img.naturalWidth * 0.68), H = Math.round(W * srcH / img.naturalWidth);
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d', { willReadFrequently: true });
+    x.drawImage(img, 0, 0, img.naturalWidth, srcH, 0, 0, W, H);
+    const d = x.getImageData(0, 0, W, H).data, total = W * H;
+    let sat = 0, violet = 0, lime = 0, neon = 0, dark = 0;
+    for (let p = 0; p < d.length; p += 4) {
+      const [h, s, l] = hsl(d[p], d[p + 1], d[p + 2]);
+      if (l < 0.16) dark++;
+      if (s > 0.35 && l > 0.2 && l < 0.85) { sat++; if (h >= 235 && h <= 300) violet++; }
+      if (h >= 72 && h <= 100 && s > 0.6 && l > 0.42 && l < 0.72) lime++;
+      if (s > 0.75 && l > 0.42 && l < 0.72) neon++;
+    }
+    const F = [], pct = (v) => Math.round(v * 100);
+    const add = (key, label, pts, roast, why, q) => F.push({ cat: 'visual', key, label, pts: Math.round(pts), roast, why, quotes: [{ note: q }] });
+    if (sat / total > 0.015 && violet / sat > 0.4) add('purple', 'purple / indigo', Math.min(16, 6 + (violet / sat) * 12), 'purple again. the official colour of “we just raised a seed round.”', 'Indigo and violet are the default accents of Tailwind UI and most AI generators, so they read as unchosen.', `${pct(violet / sat)}% of the colour above the fold is purple or indigo`);
+    if (lime / total > 0.002 && lime / total < 0.2) add('lime', 'acid lime accent', 7, 'acid lime buttons. the 2025 AI template’s favourite highlighter.', 'Neon lime pills on a plain page are a stock accent of generated templates.', `${(lime / total * 100).toFixed(1)}% acid lime above the fold`);
+    if (dark / total > 0.5 && neon / total > 0.006) add('darkneon', 'dark mode + neon', 7, 'near-black with one neon accent. the startup starter pack lives on.', 'A dark page with a single glowing accent is the most copied look of the AI era.', `${pct(dark / total)}% near-black, ${(neon / total * 100).toFixed(1)}% neon`);
+    return F;
+  }
+
+  const VERDICTS = [
+    [12, 'okay, you actually have taste'],
+    [25, 'a human was here. we can smell the coffee.'],
+    [40, 'mostly human. mildly suspicious.'],
+    [55, 'the AI is starting to show'],
+    [70, 'prompt residue detected'],
+    [85, 'this site has 200 cousins on vercel'],
+    [101, 'bro just prompted and prayed']
+  ];
+  const CAPS = { fingerprint: 34, copy: 40, layout: 36, visual: 18, nitpick: 18 };
+  function score({ findings, credits }) {
+    const merged = new Map();
+    for (const f of findings) { const p = merged.get(f.key); if (!p || f.pts > p.pts) merged.set(f.key, f); }
+    const list = [...merged.values()].sort((a, b) => b.pts - a.pts);
+    const byCat = {};
+    for (const f of list) byCat[f.cat] = (byCat[f.cat] || 0) + f.pts;
+    const pts = Object.entries(byCat).reduce((s, [k, v]) => s + Math.min(CAPS[k] || 20, v), 0);
+    const minus = Math.min(5, credits.filter((c) => !c.house).reduce((s, c) => s + c.pts, 0)) + credits.filter((c) => c.house).reduce((s, c) => s + c.pts, 0);
+    const fx = credits.find((c) => c.fixed);
+    const s = fx ? fx.fixed : Math.max(2, Math.min(99, Math.round(100 * (1 - Math.exp(-Math.max(0, pts + 6 - minus) / 32)))));
+    return { score: s, list, credits, pts, minus, verdict: VERDICTS.find(([max]) => s <= max)[1] };
+  }
+  window.__slopcheck = { analyze, score };
+
+  function scoreCells(n, cols, rows, cw, ch) {
+    const W = Math.round(cols * cw), H = Math.round(rows * ch);
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d', { willReadFrequently: true });
+    const num = String(n);
+    if (W < 2 || H < 2) return { chars: [], mask: [] };
+    let size = H * 1.22;
+    x.font = `300 ${size}px ${DISPLAY}`;
+    const pctScale = 0.42;
+    const fit = () => x.measureText(num).width + x.measureText('%').width * pctScale + size * 0.04;
+    if (fit() > W * 0.98) { size *= (W * 0.98) / fit(); x.font = `300 ${size}px ${DISPLAY}`; }
+    x.textBaseline = 'alphabetic';
+    const base = H * 0.5 + size * 0.36;
+    x.fillStyle = '#000'; x.fillText(num, 0, base);
+    const nw = x.measureText(num).width;
+    x.font = `300 ${size * pctScale}px ${DISPLAY}`;
+    x.fillStyle = '#f00'; x.fillText('%', nw + size * 0.04, base - size * 0.36);
+    const d = x.getImageData(0, 0, W, H).data;
+    const word = 'slop', chars = [], mask = [];
+    for (let r = 0; r < rows; r++) {
+      let line = ''; const m = new Uint8Array(cols);
+      for (let k = 0; k < cols; k++) {
+        let a = 0, red = 0, s = 0;
+        for (let sy = 0; sy < 3; sy++) for (let sx = 0; sx < 3; sx++) {
+          const px = Math.min(W - 1, Math.floor((k + (sx + 0.5) / 3) * cw)), py = Math.min(H - 1, Math.floor((r + (sy + 0.5) / 3) * ch));
+          const p = (py * W + px) * 4; a += d[p + 3]; red += d[p] > 128 ? d[p + 3] : 0; s++;
+        }
+        a /= s * 255; red /= s * 255;
+        line += a > 0.55 ? word[k % 4] : a > 0.25 ? '+' : a > 0.07 ? '.' : ' ';
+        m[k] = red > a * 0.5 && a > 0.07 ? 1 : 0;
+      }
+      chars.push(line); mask.push(m);
+    }
+    return { chars, mask };
+  }
+  function drawScore(canvas, n) {
+    if (!canvas.clientWidth) return;
+    const small = canvas.clientWidth < 520;
+    const g = grid(canvas, small ? 7 : 9, small ? 8 : 10);
+    const cells = scoreCells(n, g.cols, g.rows, g.cw, g.ch);
+    g.ctx.clearRect(0, 0, g.w, g.h);
+    paint(g, cells.chars, cells.mask);
+  }
+
+  const CAT = { fingerprint: 'signature', copy: 'copy', layout: 'layout and code', visual: 'visual', nitpick: 'nitpick' };
+  const node = (tag, className, text) => { const n = document.createElement(tag); if (className) n.className = className; if (text != null) n.textContent = text; return n; };
+  const qt = (q, n) => typeof q === 'string' ? `\u201c${clip(q, n)}\u201d` : clip(q.note, n);
+  function render(name, analysis, mode, hold) {
+    const r = score(analysis);
+    state.last = { ...r, name };
+    el.fix.hidden = true;
+    el.critic.hidden = !hold; el.critic.classList.toggle('wait', !!hold);
+    el.critic.firstChild.textContent = 'writing your roast';
+    el.scoreArt.setAttribute('aria-label', `${r.score} percent slop`);
+    const top = r.list.length ? r.list.slice(0, 3) : [{ roast: 'annoyingly restrained. we checked twice and found nothing to make fun of.', quotes: [] }];
+    state.last.own = top.map((f) => ({ line: f.roast, evidence: f.quotes?.[0] ? qt(f.quotes[0], 90) : '' }));
+    el.verdict.textContent = hold ? '' : r.verdict;
+    fillRoasts(hold ? [] : state.last.own);
+
+    el.items.replaceChildren();
+    const maxPts = Math.max(1, ...r.list.map((f) => f.pts));
+    for (const f of r.list.slice(0, 8)) {
+      const li = node('li');
+      li.append(node('span', '', f.label), node('span', 'n', '+' + f.pts), node('span', 'bar', '#'.repeat(Math.max(1, Math.round((f.pts / maxPts) * 16)))));
+      el.items.append(li);
+    }
+    if (r.list.length > 8) el.items.append(node('li', 'muted', `and ${r.list.length - 8} smaller crimes`));
+    if (!r.list.length) el.items.append(node('li', '', 'nothing. suspiciously clean.'));
+    for (const c of r.credits) { const li = node('li', 'credit'); li.append(node('span', '', c.label), node('span', 'n', c.pts ? '\u2212' + c.pts : 'set')); el.items.append(li); }
+    el.rcName.textContent = clip(name, 22);
+    el.rcTotal.textContent = r.score + '%';
+
+    const cats = new Set(r.list.map((f) => f.cat)).size;
+    el.reportLede.textContent = (r.list.length
+      ? `${r.list.length} pattern${r.list.length > 1 ? 's' : ''} across ${cats} ${cats > 1 ? 'categories' : 'category'}, quoted straight from the page, worst first.`
+      : 'We ran every check and came back empty handed.')
+      + (analysis.fromBundle ? ' This site renders in the browser, so we read its JavaScript bundle instead of the page.' : '')
+      + (mode === 'shot' ? ' Screenshots only get the visual checks; paste the link for copy, layout and code.' : '');
+    el.ev.replaceChildren();
+    for (const f of r.list) {
+      const li = node('li');
+      li.append(node('span', 'tag', `${CAT[f.cat] || f.cat}  +${f.pts}`), node('h4', '', f.roast));
+      if (f.quotes.length) { const q = node('div', 'quotes'); f.quotes.forEach((t) => q.append(node('p', '', qt(t, 160)))); li.append(q); }
+      li.append(node('p', 'why', f.why));
+      el.ev.append(li);
+    }
+    el.goodWrap.hidden = !r.credits.length;
+    el.good.replaceChildren(...r.credits.map((c) => { const li = node('li'); li.append(node('span', 'tag', c.pts ? `${c.label}  \u2212${c.pts}` : c.label), node('p', '', c.detail)); return li; }));
+    el.status.textContent = `${name}: ${r.score} percent slop. ${r.verdict}.`;
+
+    watchReveal([...el.ev.children, ...el.good.children, el.goodWrap.querySelector('.report-h')]);
+    el.result.hidden = false;
+    drawScore(el.scoreArt, 0);
+    el.result.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'start' });
+    const M = window.Motion;
+    if (reduce.matches || !M) { drawScore(el.scoreArt, r.score); return state.last; }
+    M.animate(0, r.score, { type: 'spring', visualDuration: 1.1, bounce: 0, onUpdate: (v) => drawScore(el.scoreArt, Math.round(v)) });
+    if (!hold) entrance(0.35);
+    M.animate([...el.items.children], { opacity: [0, 1] }, { duration: 0.4, delay: M.stagger(0.05, { startDelay: 0.5 }) });
+    return state.last;
+  }
+
+  const AI_SCHEMA = {
+    type: 'object', additionalProperties: false, required: ['verdict', 'roasts', 'fix'],
+    properties: {
+      verdict: { type: 'string' },
+      roasts: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['line', 'evidence'], properties: { line: { type: 'string' }, evidence: { type: 'string' } } } },
+      fix: { type: 'string' }
+    }
+  };
+  const store = {
+    get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+  };
+  const today = () => new Date().toISOString().slice(0, 10);
+  function takeTurn() {
+    const u = store.get('slopcheck-v', {});
+    if (u.off === today()) return false;
+    if (u.day !== today()) { u.day = today(); u.n = 0; }
+    if (u.n >= VOICE.perDay) return false;
+    u.n++; store.set('slopcheck-v', u); return true;
+  }
+  function switchOff() { const u = store.get('slopcheck-v', {}); u.off = today(); store.set('slopcheck-v', u); }
+
+  function digest(html) {
+    if (!html) return null;
+    try {
+      const d = new DOMParser().parseFromString(html, 'text/html');
+      d.querySelectorAll('script, style, noscript, template, svg').forEach((n) => n.remove());
+      const heads = [...d.querySelectorAll('h1, h2, h3')].map((h) => clip(textOf(h), 90)).filter(Boolean).slice(0, 12);
+      return {
+        title: clip(d.title, 90),
+        description: clip(d.querySelector('meta[name="description"]')?.getAttribute('content') || '', 160),
+        headings: heads,
+        excerpt: clip(textOf(d.body), 1400)
+      };
+    } catch { return null; }
+  }
+  async function consult(ctx, r, models) {
+    const evidence = {
+      site: ctx.name,
+      input: ctx.mode === 'shot' ? 'a screenshot, so only colour checks ran' : 'a link',
+      score: r.score,
+      score_meaning: 'percent AI slop, 0 to 100, already final',
+      findings: r.list.slice(0, 10).map((f) => ({ pattern: f.label, points: f.pts, evidence: f.quotes.map((q) => clip(typeof q === 'string' ? q : q.note, 120)) })),
+      credits: r.credits.map((c) => c.label),
+      page: ctx.mode === 'url' ? digest(ctx.html) : undefined
+    };
+    const res = await timed(unpack(VOICE.b), 25000, {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + unpack(VOICE.a), 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        models,
+        messages: [{ role: 'system', content: unpack(VOICE.d) }, { role: 'user', content: JSON.stringify(evidence) }],
+        response_format: { type: 'json_schema', json_schema: { name: 'roast', strict: true, schema: AI_SCHEMA } },
+        provider: { require_parameters: true },
+        max_tokens: 400
+      })
+    });
+    const j = await res.json();
+    const raw = (j.choices?.[0]?.message?.content || '').replace(/^```(?:json)?\s*|\s*```$/g, '');
+    const o = JSON.parse(raw);
+    const tidy = (t, n) => clip(String(t || '').replace(/\s*[\u2014\u2013]\s*/g, ', ').replace(/\p{Extended_Pictographic}/gu, ''), n);
+    const roasts = (Array.isArray(o.roasts) ? o.roasts : []).map((x) => ({ line: tidy(x?.line, 160), evidence: tidy(x?.evidence, 90) })).filter((x) => x.line).slice(0, 3);
+    const verdict = tidy(o.verdict, 70).replace(/[.!]+$/, '');
+    if (!verdict || !roasts.length) throw new Error('empty');
+    return { verdict, roasts, fix: tidy(o.fix, 160), model: String(j.model || unpack(VOICE.c[0])) };
+  }
+  const modelName = (id) => id.split('/').pop().replace(/[-_:]/g, ' ');
+
+  function fillRoasts(list) {
+    el.roasts.replaceChildren(...list.map((x) => { const li = node('li', '', x.line); if (x.evidence) li.append(node('small', '', x.evidence)); return li; }));
+  }
+  function entrance(delay) {
+    const M = window.Motion;
+    if (!M || reduce.matches) return;
+    const ease = [0.23, 1, 0.32, 1];
+    M.animate(el.verdict, { opacity: [0, 1], y: [18, 0] }, { duration: 0.8, delay, ease });
+    M.animate([...el.roasts.children, ...(el.fix.hidden ? [] : [el.fix])], { opacity: [0, 1], y: [14, 0] }, { duration: 0.7, delay: M.stagger(0.08, { startDelay: delay + 0.2 }), ease });
+  }
+  const precoded = (name) => isOwner(name) || /(^|\.)make\.design$/.test(name) || [...el.examples.querySelectorAll('.ex')].some((b) => b.textContent === name);
+  const cacheKey = (name, mode, s) => mode === 'url' ? `${name}:${s}` : '';
+  function canTurn() {
+    const u = store.get('slopcheck-v', {});
+    return u.off !== today() && (u.day !== today() || (u.n || 0) < VOICE.perDay);
+  }
+  function planFor(name, mode, s) {
+    if (precoded(name)) return 'delay';
+    if (!VOICE.a) return 'now';
+    const k = cacheKey(name, mode, s);
+    return (k && store.get('slopcheck-c', {})[k]) || canTurn() ? 'ai' : 'now';
+  }
+  async function opinion(ctx, r) {
+    const k = cacheKey(ctx.name, ctx.mode, r.score);
+    const cache = store.get('slopcheck-c', {});
+    if (k && cache[k]) return cache[k];
+    if (!takeTurn()) return null;
+    const models = VOICE.c.map(unpack);
+    let out = null;
+    try { out = await consult(ctx, r, models); }
+    catch (e) {
+      if (/http (401|402|403)/.test(e.message)) switchOff();
+      else if (!/http/.test(e.message) && e.name !== 'AbortError' && state.last === r) out = await consult(ctx, r, models.slice(1)).catch(() => null);
+    }
+    if (out && k) {
+      const c = store.get('slopcheck-c', {}); c[k] = out;
+      const keys = Object.keys(c); if (keys.length > 40) delete c[keys[0]];
+      store.set('slopcheck-c', c);
+    }
+    return out;
+  }
+  function reveal(r, out) {
+    el.critic.classList.remove('wait');
+    el.critic.hidden = !out;
+    if (out) {
+      r.verdict = out.verdict; r.aiRoast = out.roasts[0].line;
+      el.critic.firstChild.textContent = `roast by ${modelName(out.model)}`;
+      el.fixText.textContent = out.fix;
+      el.fix.hidden = !out.fix;
+    }
+    el.verdict.textContent = r.verdict;
+    fillRoasts(out ? out.roasts : r.own);
+    el.status.textContent = `${r.name}: ${r.score} percent slop. ${r.verdict}.`;
+    entrance(0);
+  }
+  async function deliver(name, analysis, mode, ctx) {
+    const s = score(analysis).score;
+    const plan = planFor(name, mode, s);
+    const r = render(name, analysis, mode, plan !== 'now');
+    if (plan === 'now') return;
+    const out = plan === 'ai' ? await opinion({ ...ctx, name, mode }, r) : (await sleep(1800 + Math.random() * 900), null);
+    if (state.last === r) reveal(r, out);
+  }
+
+  function setBusy(b) {
+    state.busy = b;
+    el.go.disabled = b;
+    el.drop.disabled = b;
+    el.go.textContent = b ? 'Checking...' : 'Check my slop';
+  }
+  function resetScope() {
+    state.cells = null; state.img = null;
+    el.screen.classList.remove('orig'); el.peek.hidden = true; el.peek.setAttribute('aria-pressed', 'false'); el.peek.textContent = 'Show original';
+    el.orig.removeAttribute('src');
+  }
+  const IDLE_CAP = 'Specimen 01. The eye that watches every AI site, finally held for observation.';
+
+  async function runUrl(input) {
+    let url;
+    try {
+      url = input.trim(); if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+      const u = new URL(url); if (!u.hostname.includes('.')) throw 0;
+      url = u.href;
+    } catch { showErr('That link looks made up. Give us the whole thing, like example.com.'); return; }
+    hideErr(); setBusy(true); el.log.replaceChildren(); el.result.hidden = true; resetScope();
+    const host = new URL(url).hostname.replace(/^www\./, '');
+    el.cap.textContent = `Fetching ${host}. Hold still.`;
+    log('suspect', host);
+    if (innerWidth <= 900) el.scope.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'center' });
+    const stop = jokes();
+    const t0 = Date.now();
+    const [rd, jn, px] = await Promise.allSettled([getRendered(url), getJina(url), getProxy(url)]);
+    const ml = rd.status === 'fulfilled' ? rd.value : { html: '', img: null };
+    const jh = (jn.status === 'fulfilled' && jn.value) || (px.status === 'fulfilled' ? px.value : '');
+    let html = bodyText(ml.html).length > 200 ? ml.html : jh;
+    let source = html === ml.html && html ? 'rendered' : html ? 'static' : 'blocked';
+    let bundle = '';
+    if (bodyText(html).length < 200 && (jh || ml.html)) {
+      try { bundle = await getBundle(jh || ml.html, url); if (bundle) source = 'js bundle'; } catch {}
+    }
+    let css = '';
+    if (html) { try { css = await getCss(html, url); } catch {} }
+    if (Date.now() - t0 < 1400) await sleep(1400 - (Date.now() - t0));
+    stop();
+    log('markup', source === 'blocked' ? 'blocked' : `${Math.round((html.length + bundle.length) / 1024)} kB, ${source}`);
+    log('screenshot', ml.img ? 'captured' : 'unavailable');
+    if (!bundle && bodyText(html).length < 200 && /<title[^>]*>[^<]*(404|not[ _]found)/i.test(jh + ml.html)) {
+      setBusy(false); startBlob(); el.cap.textContent = IDLE_CAP;
+      showErr('That link is a 404. Even slop has to exist first.');
+      return;
+    }
+    if (!html && !ml.img && !bundle) {
+      setBusy(false); startBlob();
+      el.cap.textContent = IDLE_CAP;
+      showErr('This site would not let us snoop. Upload a screenshot and we can still judge it.');
+      return;
+    }
+    const g = grid(el.scope, 11, 13);
+    if (ml.img) {
+      state.img = ml.img; el.orig.src = ml.img.src; el.orig.alt = `Screenshot of ${host}`;
+      state.cells = imageCells(ml.img, g.cols, g.cw, g.ch);
+    } else {
+      state.cells = textCells(host, g.cols, g.rows, g.cw, g.ch);
+    }
+    el.cap.textContent = `Scanning ${host}. The bright marks are the suspicious pixels.`;
+    const analysis = analyze({ html, raw: jh + '\n' + ml.html, css, img: ml.img, bundle, host });
+    await Promise.all([scan(state.cells), streamFindings(analysis.findings)]);
+    el.cap.textContent = ml.img ? `${host}, rendered the way it deserves. The bright marks are the slop.` : `${host} blocked our camera, so we judged the markup alone.`;
+    el.peek.hidden = !ml.img;
+    setBusy(false);
+    deliver(host, analysis, 'url', { html: html || bundleToHtml(bundle) });
+  }
+
+  async function runFile(file) {
+    if (state.busy) return;
+    if (!file || !file.type.startsWith('image/')) { showErr('We need an image, not a mysterious file.'); return; }
+    if (file.size > 12 * 1024 * 1024) { showErr('That screenshot is huge. Keep it under 12 MB.'); return; }
+    hideErr(); setBusy(true); el.log.replaceChildren(); el.result.hidden = true; resetScope();
+    if (state.imgUrl) URL.revokeObjectURL(state.imgUrl);
+    state.imgUrl = URL.createObjectURL(file);
+    const name = (file.name || 'screenshot').replace(/\.[^.]+$/, '');
+    try {
+      const img = await loadImage(state.imgUrl, false);
+      await fontsReady;
+      state.img = img; el.orig.src = state.imgUrl; el.orig.alt = 'Your screenshot';
+      log('suspect', clip(name, 28));
+      log('pixels', `${img.naturalWidth} x ${img.naturalHeight}`);
+      const g = grid(el.scope, 11, 13);
+      state.cells = imageCells(img, g.cols, g.cw, g.ch);
+      el.cap.textContent = 'Scanning your screenshot. The bright marks are the suspicious pixels.';
+      const analysis = analyze({ img });
+      await Promise.all([scan(state.cells, 1700), streamFindings(analysis.findings)]);
+      el.cap.textContent = 'Your screenshot, rendered the way it deserves. The bright marks are the slop.';
+      el.peek.hidden = false;
+      deliver(name, analysis, 'shot', {});
+    } catch {
+      showErr('We could not read that image. PNG, JPG or WebP should work.');
+      startBlob();
+    } finally { setBusy(false); }
+  }
+
+  async function streamFindings(findings) {
+    const list = [...findings].sort((a, b) => b.pts - a.pts);
+    if (!list.length) { await sleep(500); log('patterns found', 'none'); return; }
+    for (const f of list) { await sleep(reduce.matches ? 0 : 160); log(f.label, '+' + f.pts, true); }
+  }
+
+  el.urlPanel.addEventListener('submit', (e) => { e.preventDefault(); if (!state.busy) runUrl(el.url.value); });
+  el.examples.querySelectorAll('.ex').forEach((b) => b.addEventListener('click', () => { if (state.busy) return; el.url.value = b.textContent; runUrl(b.textContent); }));
+  el.drop.addEventListener('click', () => el.file.click());
+  el.file.addEventListener('change', () => { runFile(el.file.files[0]); el.file.value = ''; });
+  ['dragenter', 'dragover'].forEach((t) => el.drop.addEventListener(t, (e) => { e.preventDefault(); el.drop.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach((t) => el.drop.addEventListener(t, (e) => { e.preventDefault(); el.drop.classList.remove('drag'); }));
+  el.drop.addEventListener('drop', (e) => runFile(e.dataTransfer.files[0]));
+  addEventListener('dragover', (e) => e.preventDefault());
+  addEventListener('drop', (e) => { e.preventDefault(); const f = e.dataTransfer?.files?.[0]; if (f) { showView('check'); setMode('shot'); runFile(f); } });
+  addEventListener('paste', (e) => {
+    const f = [...(e.clipboardData?.files || [])].find((x) => x.type.startsWith('image/'));
+    if (f) { e.preventDefault(); showView('check'); setMode('shot'); runFile(f); }
+  });
+  el.peek.addEventListener('click', () => {
+    const on = el.screen.classList.toggle('orig');
+    el.peek.setAttribute('aria-pressed', on);
+    el.peek.textContent = on ? 'Show the ASCII' : 'Show original';
+  });
+  el.again.addEventListener('click', () => {
+    el.result.hidden = true; resetScope(); el.log.replaceChildren();
+    el.cap.textContent = IDLE_CAP;
+    startBlob();
+    scrollTo({ top: 0, behavior: reduce.matches ? 'auto' : 'smooth' });
+    if (state.mode === 'url') { el.url.focus({ preventScroll: true }); el.url.select(); } else el.drop.focus({ preventScroll: true });
+  });
+
+  function wrap(ctx, text, x, y, max, lh, lines) {
+    const words = text.split(' '); let line = '', n = 0;
+    for (const w of words) {
+      const t = line ? line + ' ' + w : w;
+      if (ctx.measureText(t).width > max && line) { ctx.fillText(line, x, y + n * lh); line = w; if (++n >= lines) return n; } else line = t;
+    }
+    if (line && n < lines) { ctx.fillText(line, x, y + n * lh); n++; }
+    return n;
+  }
+  el.share.addEventListener('click', async () => {
+    const r = state.last; if (!r) return;
+    await fontsReady;
+    readColors();
+    const c = document.createElement('canvas'); c.width = 2400; c.height = 1260;
+    const x = c.getContext('2d'); x.scale(2, 2);
+    x.fillStyle = PAPER; x.fillRect(0, 0, 1200, 630);
+    x.font = `400 9px ${MONO}`;
+    const cw = x.measureText('M').width, ch = 10;
+    const cols = Math.floor(600 / cw), rows = 30;
+    const sc = scoreCells(r.score, cols, rows, cw, ch);
+    paint({ ctx: x, ch, fontPx: 9 }, sc.chars, sc.mask, 64, 90);
+    x.fillStyle = INK; x.font = `300 46px ${DISPLAY}`; x.textBaseline = 'alphabetic';
+    const vl = wrap(x, r.verdict, 64, 440, 600, 52, 2);
+    const roast = r.aiRoast || r.list[0]?.roast || 'annoyingly restrained. we checked twice.';
+    x.fillStyle = GREY; x.font = `400 22px ${DISPLAY}`;
+    wrap(x, roast, 64, 440 + vl * 52 + 4, 560, 30, 2);
+    x.font = `500 13px ${MONO}`; x.textBaseline = 'top';
+    x.fillStyle = INK; x.fillText('Cek AI Slop', 64, 52);
+    x.fillStyle = GREY; x.font = `400 13px ${MONO}`; x.fillText(r.name.length > 34 ? r.name.slice(0, 33) + '\u2026' : r.name, 64 + x.measureText('Cek AI Slop').width + 24, 52);
+    x.fillText('@l\u00e0ngzyjir_', 1000, 52);
+    if (state.cells) {
+      const fx = 7, fh = 8;
+      x.font = `400 ${fx}px ${MONO}`;
+      const w2 = x.measureText('M').width;
+      const g2 = { ctx: x, ch: fh, fontPx: fx };
+      const maxCols = Math.floor(440 / w2), maxRows = Math.floor(500 / fh);
+      const src = state.img ? imageCells(state.img, maxCols, w2, fh) : textCells(r.name, maxCols, 30, w2, fh);
+      paint(g2, src.chars.slice(0, maxRows), src.mask.slice(0, maxRows), 700, 64);
+    }
+    const blob = await new Promise((res) => c.toBlob(res, 'image/png'));
+    const fname = 'slopcheck-' + r.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '.png';
+    const file = new File([blob], fname, { type: 'image/png' });
+    if (matchMedia('(pointer: coarse)').matches && navigator.canShare?.({ files: [file] })) {
+      try { await navigator.share({ files: [file], text: `${r.name} is ${r.score}% AI slop. ${r.verdict}.` }); return; } catch {}
+    }
+    const a = document.createElement('a'); a.download = fname; a.href = URL.createObjectURL(blob); a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    el.share.textContent = 'Shame exported'; setTimeout(() => (el.share.textContent = 'Share your shame'), 1500);
+  });
+
+  const hotS = el.hot.querySelector('.hot-s'), HOT = el.hot.querySelector('.hot-t').textContent;
+  const h1el = el.hot.parentElement;
+  let wi = 0;
+  [...h1el.childNodes].forEach((n) => {
+    if (n.nodeType !== 3) return;
+    const frag = document.createDocumentFragment();
+    n.textContent.split(/(\s+)/).forEach((p) => {
+      if (!p) return;
+      if (/^\s+$/.test(p)) { frag.append(' '); return; }
+      const w = document.createElement('span'), i = document.createElement('span');
+      w.className = 'w'; i.className = 'wi'; i.textContent = p; i.style.setProperty('--d', (0.08 * wi++ + 0.1) + 's');
+      w.append(i); frag.append(w);
+    });
+    n.replaceWith(frag);
+  });
+  el.hot.style.setProperty('--d', (0.08 * wi + 0.1) + 's');
+  let hotBusy = false;
+  function runHot(ms) {
+    if (hotBusy) return;
+    hotBusy = true;
+    el.hot.classList.add('scr');
+    scramble(hotS, HOT, ms, () => { el.hot.classList.remove('scr'); hotS.textContent = ''; hotBusy = false; });
+  }
+  if (!reduce.matches) {
+    fontsReady.then(() => setTimeout(() => runHot(1000), 1000));
+    setInterval(() => { if (curView === 'check') runHot(700); }, 6500);
+    el.hot.addEventListener('pointerenter', () => runHot(600));
+  }
+  const field = el.url.closest('.field');
+  el.url.addEventListener('input', () => field.classList.toggle('typed', /^\s*[a-z][a-z0-9+.-]*:\/\//i.test(el.url.value)));
+
+  const views = { check: $('#viewCheck'), info: $('#viewInfo'), theme: $('#viewTheme') };
+  const dockItems = [...document.querySelectorAll('.dock-item[data-view]')];
+  const dockLine = $('#dockLine');
+  const VIEW_ORDER = ['check', 'info', 'theme'];
+  let curView = 'check';
+  const asciiCv = $('#asciiArt');
+  let asciiRAF = 0, asciiG = null, asciiLast = 0;
+
+  function placeDock() {
+    const b = dockItems.find((x) => x.dataset.view === curView);
+    if (!b) return;
+    dockLine.style.width = b.offsetWidth + 'px';
+    dockLine.style.transform = `translateX(${b.offsetLeft}px)`;
+  }
+  function asciiFrame(t) {
+    const g = asciiG; if (!g || !g.cols) return;
+    let ry = g.rows * 0.36, rx = ry * (g.ch / g.cw);
+    if (rx > g.cols * 0.2) { rx = g.cols * 0.2; ry = rx * (g.cw / g.ch); }
+    const cy = g.rows * 0.52;
+    const lenses = [g.cols * 0.5 - rx * 1.3, g.cols * 0.5 + rx * 1.3];
+    const chars = [], mask = [];
+    for (let r = 0; r < g.rows; r++) {
+      let line = ''; const m = new Uint8Array(g.cols);
+      for (let c = 0; c < g.cols; c++) {
+        let ch = ' ', k = 0;
+        for (const cx of lenses) {
+          const dx = (c - cx) / rx, dy = (r - cy) / ry;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (Math.abs(d - 1) < 0.17) { ch = '#'; k = 1; }
+          else if (d < 1) {
+            const w = 0.5 + 0.5 * Math.sin(c * 0.35 + r * 0.7 - t * 0.003);
+            const glare = ((c + r * 2 - t * 0.02) % 46 + 46) % 46 < 4;
+            ch = glare ? '@' : RAMP[Math.min(4, Math.floor(w * 5))];
+            k = glare ? 1 : 0;
+          }
+        }
+        const bx = Math.abs(c - g.cols * 0.5);
+        if (ch === ' ' && bx < (lenses[1] - lenses[0]) / 2 - rx * 0.9 && Math.abs(r - (cy - ry * 0.25)) < 0.6) { ch = '='; k = 1; }
+        if (ch === ' ' && r > cy - ry * 0.6 && r < cy - ry * 0.2 && (c < lenses[0] - rx * 1.05 && c > lenses[0] - rx * 1.7 || c > lenses[1] + rx * 1.05 && c < lenses[1] + rx * 1.7)) { ch = '-'; k = 2; }
+        line += ch; m[c] = k;
+      }
+      chars.push(line); mask.push(m);
+    }
+    g.ctx.clearRect(0, 0, g.w, g.h);
+    paint(g, chars, mask);
+  }
+  function asciiLoop(t) {
+    asciiRAF = 0;
+    if (curView !== 'info') return;
+    if (t - asciiLast > 50) { asciiLast = t; asciiFrame(t); }
+    asciiRAF = requestAnimationFrame(asciiLoop);
+  }
+  function startAscii() {
+    asciiG = grid(asciiCv, 11, 13);
+    asciiFrame(performance.now());
+    if (!reduce.matches && !asciiRAF) asciiRAF = requestAnimationFrame(asciiLoop);
+  }
+
+  const TICKS = ['Cek AI Slop by @l\u00e0ngzyjir_', 'membaca markup dan piksel', 'screenshot tidak keluar dari browser', 'ikuti TikTok dan channel di bawah'];
+  let tickTimer = 0;
+  function startTicker() {
+    const box = $('#ticker');
+    clearInterval(tickTimer);
+    let i = 0, n = 0, hold = 0;
+    box.textContent = '';
+    if (reduce.matches) { box.textContent = TICKS[0]; return; }
+    tickTimer = setInterval(() => {
+      const s = TICKS[i];
+      if (hold > 0) { hold--; return; }
+      if (n <= s.length) { box.textContent = s.slice(0, n++); if (n > s.length) hold = 22; }
+      else { n = 0; i = (i + 1) % TICKS.length; }
+    }, 55);
+  }
+
+  function showView(name) {
+    if (name === curView) return;
+    const from = VIEW_ORDER.indexOf(curView), to = VIEW_ORDER.indexOf(name);
+    views[curView].classList.add('hidden');
+    views[name].classList.remove('hidden');
+    curView = name;
+    dockItems.forEach((b) => {
+      const on = b.dataset.view === name;
+      b.classList.toggle('active', on);
+      if (on) { b.classList.remove('hop'); void b.offsetWidth; b.classList.add('hop'); }
+    });
+    placeDock();
+    const v = views[name];
+    v.style.setProperty('--dx', (to > from ? 28 : -28) + 'px');
+    v.classList.remove('enter'); void v.offsetWidth; v.classList.add('enter');
+    setTimeout(() => v.classList.remove('enter'), 900);
+    scrollTo({ top: 0, behavior: 'auto' });
+    if (name === 'info') { startAscii(); startTicker(); } else clearInterval(tickTimer);
+    if (name === 'check') {
+      placeIndicator();
+      requestAnimationFrame(() => {
+        if (!state.scanning) redrawScope();
+        if (state.last && !el.result.hidden) drawScore(el.scoreArt, state.last.score);
+      });
+    }
+  }
+  dockItems.forEach((b) => b.addEventListener('click', () => showView(b.dataset.view)));
+  addEventListener('resize', () => { placeDock(); if (curView === 'info') startAscii(); });
+  fontsReady.then(placeDock);
+  placeDock();
+
+  const btnDark = $('#btnThemeDark'), btnLight = $('#btnThemeLight');
+  function setTheme(theme, animate) {
+    const root = document.documentElement;
+    if (animate && !reduce.matches) {
+      root.classList.add('theming');
+      setTimeout(() => root.classList.remove('theming'), 650);
+    }
+    root.setAttribute('data-theme', theme);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'light' ? '#e8eaed' : '#141516');
+    btnDark.classList.toggle('active', theme === 'dark');
+    btnLight.classList.toggle('active', theme === 'light');
+    try { localStorage.setItem('slopcheck-theme', theme); } catch (e) {}
+    readColors();
+    if (curView === 'check') {
+      if (!state.scanning) redrawScope();
+      if (state.last && !el.result.hidden) drawScore(el.scoreArt, state.last.score);
+    }
+    if (curView === 'info') startAscii();
+  }
+  btnDark.onclick = () => setTheme('dark', true);
+  btnLight.onclick = () => setTheme('light', true);
+  btnDark.classList.toggle('active', !isLight());
+  btnLight.classList.toggle('active', isLight());
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta && isLight()) themeMeta.setAttribute('content', '#e8eaed');
+
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.12 });
+  function watchReveal(list) {
+    list.filter(Boolean).forEach((n, i) => { n.classList.remove('in'); n.classList.add('rv'); n.style.transitionDelay = (i % 2) * 90 + 'ms'; io.observe(n); });
+  }
+
+  const dockIn = $('#dockIn');
+  if (window.ResizeObserver) { const ro = new ResizeObserver(placeDock); dockItems.forEach((b) => ro.observe(b)); }
+  dockIn.addEventListener('pointermove', (e) => {
+    dockItems.forEach((b) => {
+      const r = b.getBoundingClientRect();
+      const d = Math.abs(e.clientX - (r.left + r.width / 2));
+      b.style.setProperty('--s', (1 + 0.28 * Math.max(0, 1 - d / 90)).toFixed(3));
+    });
+  });
+  dockIn.addEventListener('pointerleave', () => dockItems.forEach((b) => b.style.removeProperty('--s')));
+
+  const rippleSel = '.go, .quiet, .peek, .seg button, .dock-item';
+  const sparkChars = ['+', '*', '#', '.', ':', '=', '%', '@'];
+  addEventListener('pointerdown', (e) => {
+    if (reduce.matches) return;
+    const t = e.target.closest?.(rippleSel);
+    if (t) {
+      const r = t.getBoundingClientRect(), d = document.createElement('span');
+      d.className = 'ripple'; d.style.left = (e.clientX - r.left) + 'px'; d.style.top = (e.clientY - r.top) + 'px';
+      t.append(d); setTimeout(() => d.remove(), 700);
+    }
+    if (e.target.closest?.('input, textarea')) return;
+    for (let i = 0; i < 7; i++) {
+      const p = document.createElement('span');
+      p.className = 'spark'; p.textContent = sparkChars[(Math.random() * sparkChars.length) | 0];
+      p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
+      document.body.append(p);
+      const a = Math.random() * Math.PI * 2, dist = 24 + Math.random() * 40;
+      p.animate([{ transform: 'translate(-50%, -50%) scale(1)', opacity: 1 }, { transform: `translate(calc(-50% + ${Math.cos(a) * dist}px), calc(-50% + ${Math.sin(a) * dist - 10}px)) scale(.4)`, opacity: 0 }], { duration: 600 + Math.random() * 300, easing: 'cubic-bezier(.2,.8,.2,1)' }).onfinish = () => p.remove();
+    }
+  });
+
+  const glowEl = $('#glow'), gp = { x: 0, y: 0, tx: 0, ty: 0, run: false };
+  function glowLoop() {
+    gp.x += (gp.tx - gp.x) * 0.12; gp.y += (gp.ty - gp.y) * 0.12;
+    glowEl.style.transform = `translate(${gp.x}px, ${gp.y}px)`;
+    if (Math.abs(gp.tx - gp.x) + Math.abs(gp.ty - gp.y) > 0.5) requestAnimationFrame(glowLoop); else gp.run = false;
+  }
+  const logoEl = $('.logo'), pupils = [...document.querySelectorAll('.logo .pupil')];
+  addEventListener('pointermove', (e) => {
+    if (reduce.matches) return;
+    if (e.pointerType !== 'touch') {
+      glowEl.classList.add('on'); gp.tx = e.clientX; gp.ty = e.clientY;
+      if (!gp.run) { gp.run = true; requestAnimationFrame(glowLoop); }
+    }
+    const lr = logoEl.getBoundingClientRect(), dx = e.clientX - (lr.left + lr.width / 2), dy = e.clientY - (lr.top + lr.height / 2), L = Math.hypot(dx, dy) || 1, k = Math.min(1, L / 160) * 1.6;
+    pupils.forEach((p) => { p.style.setProperty('--px', (dx / L * k).toFixed(2) + 'px'); p.style.setProperty('--py', (dy / L * k).toFixed(2) + 'px'); });
+    const h = e.target.closest?.('.card, .scope, .drop, .theme-card');
+    if (h) { const r = h.getBoundingClientRect(); h.style.setProperty('--mx', (e.clientX - r.left) + 'px'); h.style.setProperty('--my', (e.clientY - r.top) + 'px'); }
+  });
+
+  const HINTS = ['yourwebsite.com', 'vercel.com', 'netlify.com', 'portfolio-kamu.vercel.app'];
+  if (!reduce.matches) {
+    let hi = 0, hn = 0, hold = 0;
+    setInterval(() => {
+      if (document.activeElement === el.url || el.url.value) return;
+      const w = HINTS[hi];
+      if (hold > 0) { hold--; return; }
+      if (hn <= w.length) { el.url.placeholder = w.slice(0, hn++) || ' '; if (hn > w.length) hold = 20; }
+      else { hn = 0; hi = (hi + 1) % HINTS.length; }
+    }, 80);
+  }
+
+  fontsReady.then(() => { readColors(); startBlob(); });
+  startBlob();
+  reduce.addEventListener?.('change', () => { if (!state.cells) startBlob(); });
+})();
+</script>
+</body>
+</html>
